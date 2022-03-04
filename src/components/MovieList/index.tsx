@@ -1,7 +1,8 @@
 import React, { lazy, Suspense, useState } from "react";
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import { View, Text, FlatList } from "react-native";
 
-import { movies } from "../data/movies";
+import { movies } from "../../data/movies";
+import { styles } from "./styles";
 
 const MovieCard = lazy(() => import("./MovieCard"));
 
@@ -78,16 +79,9 @@ export const MovieList = () => {
         maxToRenderPerBatch={10}
         initialNumToRender={10}
         onEndReached={onEnd}
+        style={styles.list}
       />
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    width: "100%",
-    height: "75%",
-    paddingHorizontal: 10,
-    
-  }
-});

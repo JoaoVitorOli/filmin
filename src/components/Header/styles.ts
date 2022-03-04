@@ -14,7 +14,8 @@ export const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     paddingHorizontal: 20,
-    paddingVertical: 10,
+    paddingTop: 10,
+    paddingBottom: 13,
   },
 
   top: {
@@ -34,5 +35,39 @@ export const styles = StyleSheet.create({
     color: theme.colors.text,
     fontSize: 20,
     fontFamily: "inter_bold"
+  },
+
+  middle: {
+    marginTop: 6
+  },
+
+  middleTextWithGradient: {
+    flexDirection: "row",
+  },
+
+  text: {
+    color: theme.colors.text,
+    fontFamily: "nunito_bold",
+    fontSize: 16
+  },
+
+  textGradient: {
+    color: theme.colors.text,
+    fontFamily: "nunito_bold",
+    fontSize: 16,
+    marginHorizontal: 3.5
+  },
+
+  bottom: {
+    flexDirection: "row",
+    alignItems: "flex-end",
+    justifyContent: "space-between",
+    marginTop: "auto"
+  },
+
+  textSmall: {
+    color: theme.colors.gray,
+    fontFamily: "nunito_bold",
+    fontSize: 13,
   }
 });

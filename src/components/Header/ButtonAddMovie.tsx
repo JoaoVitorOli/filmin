@@ -1,13 +1,19 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity } from "react-native";
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/Feather';
 import LinearGradient from "react-native-linear-gradient";
 
-export function Profile() {
+interface ButtonAddMovieProps {
+  handleOpenModal: () => void;
+}
+
+export function ButtonAddMovie({
+  handleOpenModal
+}: ButtonAddMovieProps) {
   return (
     <TouchableOpacity 
-      onPress={() => {}} 
-      style={styles.buttonProfile}
+      onPress={() => handleOpenModal()} 
+      style={styles.button}
       activeOpacity={0.8}
     >
       <LinearGradient
@@ -23,17 +29,17 @@ export function Profile() {
         }}
       >
         <Icon 
-          name="person-outline"
-          size={25}
+          name="plus"
+          size={30}
           color={"#fff"}
-        /> 
+        />
       </LinearGradient>
     </TouchableOpacity>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
-  buttonProfile: {
-    marginLeft: "auto"
+  button: {
+    borderRadius: 12
   }
 })
