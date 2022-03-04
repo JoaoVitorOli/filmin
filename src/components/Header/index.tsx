@@ -33,6 +33,7 @@ export function Header() {
             source={require("../../assets/icon.png")}
             style={styles.icon}
           />
+          
           <Text style={styles.textLogo}>FILMIN</Text>
 
           <Profile />

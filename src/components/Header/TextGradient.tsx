@@ -11,7 +11,7 @@ interface GradientTextProps {
 export function TextGradient({ text }: GradientTextProps) {
   return (
     <MaskedView
-      style={{ height: 19, width: 50 }}
+      style={{ height: 19, width: 58 }}
       maskElement={
         <Text style={styles.text}>
           {text}
@@ -31,7 +31,7 @@ export function TextGradient({ text }: GradientTextProps) {
 const styles = StyleSheet.create({
   text: {
     fontFamily: "nunito_bold",
-    fontSize: 16,
+    fontSize: 18,
     marginHorizontal: 3.5
   }
 })

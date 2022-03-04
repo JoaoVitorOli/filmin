@@ -1,17 +1,20 @@
 import { StyleSheet } from "react-native";
+import { theme } from "../../styles/theme";
 
 export const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22
+    padding: 20,
+    backgroundColor: "#00000020"
   },
+
   modalView: {
     margin: 20,
-    backgroundColor: "white",
+    backgroundColor: theme.colors.shape,
     borderRadius: 20,
-    padding: 35,
+    padding: 20,
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
@@ -20,6 +23,39 @@ export const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5
+    elevation: 5,
+    width: "100%",
   },
+
+  buttonSearch: {
+    backgroundColor: theme.colors.purple,
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 6,
+    height: 40,
+    width: 40,
+    borderRadius: 6
+  },
+
+  searchArea: {
+    flexDirection: "row",
+    paddingHorizontal: 15,
+    marginTop: 25,
+    alignItems: "center"
+  },
+
+  text: {
+    color: theme.colors.text,
+    fontFamily: "nunito_bold",
+  },
+
+  buttonAddMovie: {
+    marginTop: 45,
+    backgroundColor: theme.colors.purple,
+    width: "100%",
+    height: 35,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 6
+  }
 })

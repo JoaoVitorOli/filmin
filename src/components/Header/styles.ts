@@ -38,7 +38,7 @@ export const styles = StyleSheet.create({
   },
 
   middle: {
-    marginTop: 6
+    marginTop: 12
   },
 
   middleTextWithGradient: {
@@ -48,13 +48,13 @@ export const styles = StyleSheet.create({
   text: {
     color: theme.colors.text,
     fontFamily: "nunito_bold",
-    fontSize: 16
+    fontSize: 18
   },
 
   textGradient: {
     color: theme.colors.text,
     fontFamily: "nunito_bold",
-    fontSize: 16,
+    fontSize: 18,
     marginHorizontal: 3.5
   },
 
