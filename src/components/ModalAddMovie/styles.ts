@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
-    backgroundColor: "#00000020"
+    backgroundColor: "#00000090"
   },
 
   modalView: {
@@ -39,7 +39,6 @@ export const styles = StyleSheet.create({
 
   searchArea: {
     flexDirection: "row",
-    paddingHorizontal: 15,
     marginTop: 25,
     alignItems: "center"
   },

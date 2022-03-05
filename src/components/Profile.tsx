@@ -2,13 +2,21 @@ import React from 'react';
 import { StyleSheet, TouchableOpacity } from "react-native";
 import Icon from 'react-native-vector-icons/Ionicons';
 import LinearGradient from "react-native-linear-gradient";
+import { SheetManager } from 'react-native-actions-sheet';
 
-export function Profile() {
+interface ProfileProps {
+  isClickable?: boolean;
+}
+
+export function Profile({ isClickable = true }: ProfileProps) {
+  function openActionSheetProfile() {
+    SheetManager.show("profile_sheet");
+  }
+
   return (
     <TouchableOpacity 
-      onPress={() => {}} 
-      style={styles.buttonProfile}
-      activeOpacity={0.8}
+      onPress={() => openActionSheetProfile()} 
+      activeOpacity={isClickable ? 0.8 : 1}
     >
       <LinearGradient
         colors={['#4124C3', '#B144D4']}
@@ -31,9 +39,3 @@ export function Profile() {
     </TouchableOpacity>
   )
 }
-
-const styles = StyleSheet.create({
-  buttonProfile: {
-    marginLeft: "auto"
-  }
-})

@@ -9,10 +9,11 @@ import MaskedView from "@react-native-community/masked-view";
 import LinearGradient from 'react-native-linear-gradient';
 
 import { styles } from "./styles";
-import { Profile } from './Profile';
+import { Profile } from '../Profile';
 import { TextGradient } from './TextGradient';
 import { ButtonAddMovie } from './ButtonAddMovie';
 import { ModalAddMovie } from '../ModalAddMovie';
+import { ActionSheetProfile } from '../ActionSheetProfile';
 
 export function Header() {
   const [isModalAddMovieOpen, setIsModalAddMovieOpen] = useState(false);
@@ -36,7 +37,9 @@ export function Header() {
           
           <Text style={styles.textLogo}>FILMIN</Text>
 
-          <Profile />
+          <View style={styles.profileContainer}>
+            <Profile />
+          </View>
         </View>
 
         <View style={styles.middle}>
@@ -62,6 +65,8 @@ export function Header() {
         isVisible={isModalAddMovieOpen}
         closeModal={handleCloseModalAddMovie}
       />
+
+      <ActionSheetProfile />
     </View>
   )
 }

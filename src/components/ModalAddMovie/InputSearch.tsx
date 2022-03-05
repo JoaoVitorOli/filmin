@@ -50,6 +50,7 @@ export function InputSearch({ reference }: InputSearchProps) {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     flexDirection: "row",
     alignItems: "center",
     borderColor: theme.colors.purple,

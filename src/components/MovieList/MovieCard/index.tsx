@@ -3,6 +3,7 @@ import React, { memo, useState } from "react";
 import { Text, TouchableHighlight, View } from "react-native";
 import FastImage from 'react-native-fast-image';
 import { default as IconAntDesign } from 'react-native-vector-icons/AntDesign';
+import { theme } from "../../../styles/theme";
 
 import { styles } from "./styles";
 
@@ -26,6 +27,10 @@ function MovieCard({ item }: IMoviesProps) {
         value={checkBox}
         onValueChange={() => {setCheckBox(!checkBox)}}
         style={styles.checkbox}
+        tintColors={{ 
+          true: theme.colors.purple, 
+          false: theme.colors.background
+        }}
       />
       <FastImage
         style={styles.image}

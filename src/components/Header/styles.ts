@@ -4,7 +4,7 @@ import { theme } from "../../styles/theme";
 export const styles = StyleSheet.create({
   container: {
     width: "100%",
-    height: "25%",
+    height: 190,
     backgroundColor: theme.colors.shape,
     borderBottomLeftRadius: 35,
     borderBottomRightRadius: 35,
@@ -69,5 +69,9 @@ export const styles = StyleSheet.create({
     color: theme.colors.gray,
     fontFamily: "nunito_bold",
     fontSize: 13,
+  },
+
+  profileContainer: {
+    marginLeft: "auto"
   }
 });

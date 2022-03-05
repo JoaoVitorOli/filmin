@@ -1,5 +1,13 @@
-import React, { lazy, Suspense, useState } from "react";
-import { View, Text, FlatList } from "react-native";
+import React, { 
+  lazy, 
+  Suspense, 
+  useState
+} from "react";
+import { 
+  View, 
+  Text, 
+  FlatList, 
+} from "react-native";
 
 import { movies } from "../../data/movies";
 import { styles } from "./styles";
