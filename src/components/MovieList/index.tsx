@@ -10,6 +10,7 @@ import {
 } from "react-native";
 
 import { movies } from "../../data/movies";
+import { theme } from "../../styles/theme";
 import { styles } from "./styles";
 
 const MovieCard = lazy(() => import("./MovieCard"));
@@ -30,7 +31,7 @@ interface IMoviesItemProps {
 const renderItem = ({ item }: IMoviesProps) => {
   return (
     <Suspense fallback={
-      <Text>Carregando...</Text>
+      <Text style={{color: theme.colors.text}}>Carregando...</Text>
     }>
       <MovieCard
         item={item}
@@ -88,6 +89,16 @@ export const MovieList = () => {
         initialNumToRender={10}
         onEndReached={onEnd}
         style={styles.list}
+        ListFooterComponent={
+          <View style={{
+            height: 30
+          }} />
+        }
+        ListHeaderComponent={
+          <View style={{
+            height: 6
+          }} />
+        }
       />
     </View>
   );
