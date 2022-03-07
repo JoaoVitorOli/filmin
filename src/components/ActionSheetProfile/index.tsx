@@ -1,45 +1,17 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import ActionSheet from "react-native-actions-sheet";
 import { default as IconFeather } from 'react-native-vector-icons/Feather';
 import { default as IconAntDesign } from 'react-native-vector-icons/AntDesign';
-import withObservables from '@nozbe/with-observables'
 
 import { Profile } from '../Profile';
 
 import { theme } from '../../styles/theme';
-
 import { styles } from "./styles";
-import { database } from '../../db/index.native';
-import User from '../../db/model/User';
 
 export function ActionSheetProfile() {
   const inputRef = useRef<TextInput>(null);
   const [isInputFocused, setIsInputFocused] = useState(false);
-
-  const userCollection = database.get<User>('user_info');
-
-  useEffect(() => {
-    async function createNewUser() {
-      // await database.write(async () => {
-      //   const newUser = await database.get<User>('user_info').create(user => {
-      //     user.name = ''
-      //     user.photo = ''
-      //   });
-      // })
-    }
-
-    createNewUser();
-  }, []);
-
-  // console.log(userCollection);
-
-  // const enhance = withObservables(['user'], ({ user }) => ({
-  //   user.name,
-  //   comments: post.comments, // Shortcut syntax for `post.comments.observe()`
-  // }))
-  
-  // const EnhancedPost = enhance(Post)
 
   return (
     <ActionSheet 
@@ -81,7 +53,7 @@ export function ActionSheetProfile() {
         <View style={styles.nameEditSection}>
           <TextInput
             
-            placeholder="Alterar nome"
+            placeholder="Mudar nome"
             style={[styles.input, isInputFocused && styles.inputFocused]}
             ref={inputRef}
             selectionColor={theme.colors.text}
