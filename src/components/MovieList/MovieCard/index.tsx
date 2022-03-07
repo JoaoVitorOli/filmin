@@ -1,8 +1,9 @@
-import CheckBox from "@react-native-community/checkbox";
 import React, { memo, useState } from "react";
 import { Text, TouchableHighlight, View } from "react-native";
+import BouncyCheckbox from "react-native-bouncy-checkbox";
 import FastImage from 'react-native-fast-image';
 import { default as IconAntDesign } from 'react-native-vector-icons/AntDesign';
+
 import { theme } from "../../../styles/theme";
 
 import { styles } from "./styles";
@@ -19,18 +20,21 @@ interface IMoviesProps {
 }
 
 function MovieCard({ item }: IMoviesProps) {
-  const [checkBox, setCheckBox] = useState(item.isChecked)
+  const [checkBoxValue, setCheckBoxValue] = useState(item.isChecked);
 
   return (
     <View style={styles.card}>
-      <CheckBox 
-        value={checkBox}
-        onValueChange={() => {setCheckBox(!checkBox)}}
-        style={styles.checkbox}
-        tintColors={{ 
-          true: theme.colors.purple, 
-          false: theme.colors.background
+      <BouncyCheckbox
+        size={20}
+        fillColor={theme.colors.purple}
+        unfillColor="transparent"
+        iconStyle={{ 
+          borderColor: theme.colors.gray,
+          borderRadius: 6,
+          borderWidth: 2
         }}
+        isChecked={checkBoxValue}
+        onPress={() => {setCheckBoxValue(!checkBoxValue)}}
       />
       <FastImage
         style={styles.image}
