@@ -6,8 +6,8 @@ export default appSchema({
     tableSchema({
       name: 'user_info',
       columns: [
-        { name: 'name', type: 'string', isOptional: true },
-        { name: 'photo', type: 'string', isOptional: true },
+        { name: 'name', type: 'string' },
+        { name: 'photo', type: 'string' },
       ]
     }),
   ]

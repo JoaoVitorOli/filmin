@@ -4,6 +4,7 @@ import { StatusBar } from 'react-native';
 import { Background } from './src/components/Background';
 import { Header } from './src/components/Header';
 import { MovieList } from './src/components/MovieList';
+import { database } from './src/db/index.native';
 
 import { createNewUser, getUserInfo } from './src/db/services/User';
 
@@ -14,7 +15,9 @@ const App = () => {
     async function verifyifUserInfoExist() {
       const userInfo = await getUserInfo();
 
-      if (userInfo.length === 0) {
+      console.log(userInfo);
+
+      if (userInfo && userInfo.length === 0) {
         createNewUser();
   
         return;

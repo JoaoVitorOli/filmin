@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import ActionSheet from "react-native-actions-sheet";
 import { default as IconFeather } from 'react-native-vector-icons/Feather';
@@ -8,10 +8,19 @@ import { Profile } from '../Profile';
 
 import { theme } from '../../styles/theme';
 import { styles } from "./styles";
+import { getUserInfo, setUserName } from '../../db/services/User';
 
 export function ActionSheetProfile() {
-  const inputRef = useRef<TextInput>(null);
+  const [inputName, setInputName] = useState("");
   const [isInputFocused, setIsInputFocused] = useState(false);
+
+  async function handleChangeUserName() {
+    const userInfo = await getUserInfo();
+
+    if (userInfo) {
+      await setUserName(inputName, userInfo[0].id);
+    }
+  }
 
   return (
     <ActionSheet 
@@ -52,17 +61,17 @@ export function ActionSheetProfile() {
 
         <View style={styles.nameEditSection}>
           <TextInput
-            
             placeholder="Mudar nome"
             style={[styles.input, isInputFocused && styles.inputFocused]}
-            ref={inputRef}
+            value={inputName}
+            onChangeText={(value) => setInputName(value)}
             selectionColor={theme.colors.text}
             placeholderTextColor={theme.colors.gray}
             onFocus={() => setIsInputFocused(true)}
             onBlur={() => setIsInputFocused(false)}
           />
           <TouchableOpacity 
-            onPress={() => {}} 
+            onPress={() => handleChangeUserName()} 
             style={[styles.button, { backgroundColor: theme.colors.purple }]}
             activeOpacity={0.8}
           >

@@ -1,22 +1,41 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
   Image, 
   Text, 
   View 
 } from "react-native";
 
-import MaskedView from "@react-native-community/masked-view";
-import LinearGradient from 'react-native-linear-gradient';
-
-import { styles } from "./styles";
 import { Profile } from '../Profile';
 import { TextGradient } from './TextGradient';
 import { ButtonAddMovie } from './ButtonAddMovie';
 import { ModalAddMovie } from '../ModalAddMovie';
 import { ActionSheetProfile } from '../ActionSheetProfile';
 
+import { getUserInfo } from '../../db/services/User';
+import { randomName } from '../../utils/randomName';
+
+import { styles } from "./styles";
+import withObservables from '@nozbe/with-observables';
+
 export function Header() {
   const [isModalAddMovieOpen, setIsModalAddMovieOpen] = useState(false);
+  const [userName, setUserName] = useState("");
+
+  useEffect(() => {
+    async function verifyUserName() {
+      const entries = await getUserInfo();
+
+      if (entries && entries[0].name) {
+        setUserName(entries[0].name);
+
+        return;
+      }
+
+      setUserName(randomName());
+    }
+
+    verifyUserName();
+  }, []);
 
   function handleCloseModalAddMovie() {
     setIsModalAddMovieOpen(false);
@@ -49,7 +68,7 @@ export function Header() {
             <Text style={styles.text}>de hoje,</Text>
           </View>
           
-          <Text style={styles.text}>João?</Text>
+          <Text style={styles.text}>{userName}?</Text>
         </View>
 
         <View style={styles.bottom}>
@@ -70,3 +89,10 @@ export function Header() {
     </View>
   )
 }
+
+// const enhance = withObservables(['user'], ({ user }) => ({
+//   user
+// }));
+
+// const EnhancedHeader = enhance(Header);
+// export default EnhancedHeader;
