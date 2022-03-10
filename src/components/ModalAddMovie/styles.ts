@@ -49,12 +49,18 @@ export const styles = StyleSheet.create({
   },
 
   buttonAddMovie: {
-    marginTop: 45,
+    marginTop: 20,
     backgroundColor: theme.colors.purple,
     width: "100%",
     height: 35,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 6
+  },
+
+  movieListContainer: {
+    marginVertical: 20,
+    width: "100%",
+    height: "50%",
   }
 })

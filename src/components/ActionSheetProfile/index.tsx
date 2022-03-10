@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import React, { useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { 
   Text, 
   TextInput, 
@@ -29,15 +29,15 @@ export function ActionSheetProfile() {
     return state.user.profile;
   });
 
-  async function handleChangeUserName() {
-    dispatch(changeUserName(inputName));
+  const handleChangeUserName = useCallback((input) => {
+    dispatch(changeUserName(input));
 
     // ToastAndroid.showWithGravity(
     //   "All Your Base Are Belong To Us",
     //   ToastAndroid.SHORT,
     //   ToastAndroid.CENTER
     // );
-  }
+  }, [inputName]);
 
   async function handleSelectImage() {
     const result = await launchImageLibrary({mediaType: "photo"});
@@ -116,7 +116,7 @@ export function ActionSheetProfile() {
             onBlur={() => setIsInputFocused(false)}
           />
           <TouchableOpacity 
-            onPress={() => handleChangeUserName()} 
+            onPress={() => handleChangeUserName(inputName)} 
             style={[styles.button, { backgroundColor: theme.colors.purple }]}
             activeOpacity={0.8}
           >

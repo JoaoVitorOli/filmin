@@ -10,6 +10,7 @@
   "dependencies": {
     "@nozbe/watermelondb": "^0.24.0",
     "@react-native-community/masked-view": "^0.1.11",
+    "@react-native-community/netinfo": "^8.1.0",
     "babel-plugin-inline-dotenv": "^1.6.0",
     "dotenv": "^16.0.0",
     "immer": "^9.0.12",

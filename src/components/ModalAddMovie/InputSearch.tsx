@@ -8,10 +8,11 @@ import Icon from 'react-native-vector-icons/Feather';
 import { theme } from "../../styles/theme";
 
 interface InputSearchProps {
-  reference: React.RefObject<TextInput>;
+  setText: (value: string) => void;
+  value: string;
 }
 
-export function InputSearch({ reference }: InputSearchProps) {
+export function InputSearch({ setText, value }: InputSearchProps) {
   const [isInputFocused, setIsInputFocused] = useState(false);
 
   function verifyIfInputIsFocused() {
@@ -35,7 +36,8 @@ export function InputSearch({ reference }: InputSearchProps) {
       <TextInput
         placeholder="Nome do filme..."
         style={styles.input}
-        ref={reference}
+        onChangeText={(text) => setText(text)}
+        value={value}
         selectionColor={theme.colors.text}
         placeholderTextColor={theme.colors.gray}
         onFocus={() => setIsInputFocused(true)}

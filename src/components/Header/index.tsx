@@ -16,9 +16,8 @@ import { IUserState } from '../../store';
 
 export function Header() {
   const [isModalAddMovieOpen, setIsModalAddMovieOpen] = useState(false);
-  const [userName, setUserName] = useState("");
 
-  const userNameFromState = useSelector<IUserState, string>(state => {
+  const userName = useSelector<IUserState, string>(state => {
     return state.user.name;
   });
 
@@ -53,7 +52,13 @@ export function Header() {
             <Text style={styles.text}>de hoje,</Text>
           </View>
           
-          <Text style={styles.text}>{userName}{userNameFromState}?</Text>
+          <Text 
+            ellipsizeMode='tail'
+            numberOfLines={1}
+            style={[styles.text, { width: "85%" }]}
+          >
+            {userName}?
+          </Text>
         </View>
 
         <View style={styles.bottom}>

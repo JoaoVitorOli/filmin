@@ -62,26 +62,8 @@ export function AppContainer({ children }: AppContainer) {
       // })
     }
 
-    // async function setUserNameInState() {
-    //   const userInfo = await getUserInfo();
-
-    //   if (userInfo && userInfo[0].name === "") {
-    //     const user = {
-    //       name: randomName(),
-    //       profile: userInfo[0].photo
-    //     }
-    //   }
-    // }
-
     verifyifUserInfoExist();
-    // setUserNameInState();
   }, []);
-
-  const userName = useSelector<IUserState, string>(state => {
-    return state.user.name;
-  });
-
-  console.log(userName);
 
   return (
     <View style={styles.Container}>
