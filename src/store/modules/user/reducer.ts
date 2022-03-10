@@ -26,6 +26,8 @@ export const user: Reducer<IUserInfo> = (state = INITIAL_STATE, action) => {
       case "SET_INITIAL_VALUE": {
         const user = action.payload.user;
 
+        console.log(user);
+
         draft.name = user.name;
         draft.profile = user.profile;
 

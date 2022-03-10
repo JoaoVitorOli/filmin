@@ -59,3 +59,19 @@ export async function setUserName(value: string, userId: string) {
     console.log(error);
   }
 }
+
+export async function setUserPhoto(value: string, userId: string) {
+  const userCollection = database.get<User>('user_info');
+
+  try {
+    await database.write(async () => {
+      const entrie = await userCollection.find(userId);
+  
+      await entrie.update(user => {
+        user.photo = value;
+      });
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}

@@ -2,6 +2,7 @@ import React, { memo, useState } from "react";
 import { Text, TouchableHighlight, View } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import FastImage from 'react-native-fast-image';
+import { AirbnbRating } from "react-native-ratings";
 import { default as IconAntDesign } from 'react-native-vector-icons/AntDesign';
 
 import { theme } from "../../../styles/theme";
@@ -29,7 +30,7 @@ function MovieCard({ item }: IMoviesProps) {
         fillColor={theme.colors.purple}
         unfillColor="transparent"
         iconStyle={{ 
-          borderColor: theme.colors.gray,
+          borderColor: checkBoxValue ? theme.colors.purple : theme.colors.gray,
           borderRadius: 6,
           borderWidth: 2
         }}
@@ -42,7 +43,6 @@ function MovieCard({ item }: IMoviesProps) {
           uri: item.posterPath 
             ? item.posterPath 
             : "https://avatars.githubusercontent.com/u/56055282?v=4",
-          headers: { Authorization: 'someAuthToken' },
           priority: FastImage.priority.low,
         }}
         resizeMode={FastImage.resizeMode.cover}
@@ -55,7 +55,21 @@ function MovieCard({ item }: IMoviesProps) {
             item.date && new Date(item.date).getFullYear()
           }
         </Text>
-        {/* <Text style={styles.text}>{item.averange}</Text> */}
+        <AirbnbRating
+          showRating={false}
+          count={5}
+          defaultRating={8 / 2}
+          size={10}
+          isDisabled
+          reviewSize={1}
+          starContainerStyle={{
+            marginLeft: 0,
+            marginTop: 8
+          }}
+          ratingContainerStyle={{
+            marginRight: "auto",
+          }}
+        />
       </View>
 
       <TouchableHighlight

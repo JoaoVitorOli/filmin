@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { 
   StyleSheet, 
   TextInput, 
-  View ,
+  View,
 } from "react-native";
 import Icon from 'react-native-vector-icons/Feather';
 import { theme } from "../../styles/theme";
@@ -15,9 +15,6 @@ export function InputSearch({ reference }: InputSearchProps) {
   const [isInputFocused, setIsInputFocused] = useState(false);
 
   function verifyIfInputIsFocused() {
-
-    console.log(isInputFocused);
-
     if (isInputFocused) {
       return styles.inputFocused;
     } else {

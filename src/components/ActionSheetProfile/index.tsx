@@ -1,25 +1,66 @@
-import React, { useCallback, useRef, useState } from 'react';
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import { useDispatch, useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import { 
+  Text, 
+  TextInput, 
+  TouchableOpacity, 
+  View,
+  ToastAndroid
+} from "react-native";
 import ActionSheet from "react-native-actions-sheet";
 import { default as IconFeather } from 'react-native-vector-icons/Feather';
 import { default as IconAntDesign } from 'react-native-vector-icons/AntDesign';
+import { launchImageLibrary } from "react-native-image-picker";
 
 import { Profile } from '../Profile';
 
 import { theme } from '../../styles/theme';
 import { styles } from "./styles";
-import { getUserInfo, setUserName } from '../../db/services/User';
+import { changeUserName, changeUserPhoto } from '../../store/modules/user/actions';
+import { IUserState } from '../../store';
 
 export function ActionSheetProfile() {
+  const dispatch = useDispatch();
+
   const [inputName, setInputName] = useState("");
   const [isInputFocused, setIsInputFocused] = useState(false);
 
-  async function handleChangeUserName() {
-    const userInfo = await getUserInfo();
+  const userPhoto = useSelector<IUserState, string>(state => {
+    return state.user.profile;
+  });
 
-    if (userInfo) {
-      await setUserName(inputName, userInfo[0].id);
+  async function handleChangeUserName() {
+    dispatch(changeUserName(inputName));
+
+    // ToastAndroid.showWithGravity(
+    //   "All Your Base Are Belong To Us",
+    //   ToastAndroid.SHORT,
+    //   ToastAndroid.CENTER
+    // );
+  }
+
+  async function handleSelectImage() {
+    const result = await launchImageLibrary({mediaType: "photo"});
+
+    if (result.assets) {
+      dispatch(changeUserPhoto(result.assets[0].uri!));
+
+      // toast.show({
+      //   title: "Foto alterada",
+      //   placement: "top",
+      //   backgroundColor: "purple",
+      // });
     }
+  }
+
+  async function handleDeleteProfileImage() {
+    dispatch(changeUserPhoto(""));
+
+    // toast.show({
+    //   title: "Foto removida",
+    //   placement: "top",
+    //   backgroundColor: "purple",
+    // });
   }
 
   return (
@@ -37,7 +78,7 @@ export function ActionSheetProfile() {
 
         <View style={styles.photoEditSection}>
           <TouchableOpacity 
-            onPress={() => {}} 
+            onPress={() => handleSelectImage()} 
             style={[styles.button, { 
               backgroundColor: theme.colors.purple,
               marginRight: 8
@@ -47,9 +88,13 @@ export function ActionSheetProfile() {
             <Text style={styles.buttonText}>Editar foto</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => {}} 
-            style={[styles.button, { backgroundColor: theme.colors.danger }]}
-            activeOpacity={0.8}
+            onPress={() => handleDeleteProfileImage()} 
+            style={[styles.button, { 
+              backgroundColor: theme.colors.danger,
+              opacity: !userPhoto ? 0.3 : 1
+            }]}
+            activeOpacity={0}
+            disabled={!userPhoto}
           >
             <IconFeather
               name="trash"

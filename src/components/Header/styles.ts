@@ -52,7 +52,7 @@ export const styles = StyleSheet.create({
   },
 
   textGradient: {
-    color: theme.colors.text,
+    color: theme.colors.purple,
     fontFamily: "nunito_bold",
     fontSize: 18,
     marginHorizontal: 3.5

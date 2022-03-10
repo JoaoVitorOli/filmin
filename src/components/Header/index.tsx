@@ -1,41 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { 
-  Image, 
   Text, 
   View 
 } from "react-native";
+import FastImage from 'react-native-fast-image';
 
 import { Profile } from '../Profile';
-import { TextGradient } from './TextGradient';
 import { ButtonAddMovie } from './ButtonAddMovie';
 import { ModalAddMovie } from '../ModalAddMovie';
 import { ActionSheetProfile } from '../ActionSheetProfile';
 
-import { getUserInfo } from '../../db/services/User';
-import { randomName } from '../../utils/randomName';
-
 import { styles } from "./styles";
-import withObservables from '@nozbe/with-observables';
+import { useSelector } from 'react-redux';
+import { IUserState } from '../../store';
 
 export function Header() {
   const [isModalAddMovieOpen, setIsModalAddMovieOpen] = useState(false);
   const [userName, setUserName] = useState("");
 
-  useEffect(() => {
-    async function verifyUserName() {
-      const entries = await getUserInfo();
-
-      if (entries && entries[0].name) {
-        setUserName(entries[0].name);
-
-        return;
-      }
-
-      setUserName(randomName());
-    }
-
-    verifyUserName();
-  }, []);
+  const userNameFromState = useSelector<IUserState, string>(state => {
+    return state.user.name;
+  });
 
   function handleCloseModalAddMovie() {
     setIsModalAddMovieOpen(false);
@@ -49,7 +34,7 @@ export function Header() {
     <View style={styles.container}>
       <View style={styles.wrapper}>
         <View style={styles.top}>
-          <Image
+          <FastImage
             source={require("../../assets/icon.png")}
             style={styles.icon}
           />
@@ -64,11 +49,11 @@ export function Header() {
         <View style={styles.middle}>
           <View  style={styles.middleTextWithGradient}>
             <Text style={styles.text}>Qual o</Text>
-            <TextGradient text='filmin' />
+            <Text style={styles.textGradient}>filmin</Text>
             <Text style={styles.text}>de hoje,</Text>
           </View>
           
-          <Text style={styles.text}>{userName}?</Text>
+          <Text style={styles.text}>{userName}{userNameFromState}?</Text>
         </View>
 
         <View style={styles.bottom}>
@@ -89,10 +74,3 @@ export function Header() {
     </View>
   )
 }
-
-// const enhance = withObservables(['user'], ({ user }) => ({
-//   user
-// }));
-
-// const EnhancedHeader = enhance(Header);
-// export default EnhancedHeader;

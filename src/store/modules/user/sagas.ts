@@ -1,4 +1,5 @@
-import { all, takeLatest } from "redux-saga/effects";
+import { all, call, takeLatest } from "redux-saga/effects";
+import { getUserInfo, setUserName, setUserPhoto } from "../../../db/services/User";
 import { changeUserName, changeUserPhoto } from "./actions";
 
 type ChangeUserNameRequest = ReturnType<typeof changeUserName>;
@@ -13,28 +14,34 @@ interface UserTypes {
 function* seveUserNameIntoWatermelondb({ payload }: ChangeUserNameRequest) {
   const { userName } = payload;
 
-  // realm.write(() => {
-  //   const data = realm.objectForPrimaryKey<UserTypes>("UserInformation", 1)!;
+  async function awaitFunction() {
+    const userInfo = await getUserInfo();
 
-  //   data.name = userName
-  // });
+    if (userInfo) {
+      await setUserName(userName, userInfo[0].id);
+    }
+  }
+
+  yield call(awaitFunction);
 }
 
-// function* seveUserPhotoIntoRealm({ payload }: ChangeUserPhotoRequest) {
-//   const { path } = payload;
+function* seveUserPhotoIntoWatermelondb({ payload }: ChangeUserPhotoRequest) {
+  const { path } = payload;
 
-//   const realm: Realm = yield getRealm();
+  async function awaitFunction() {
+    const userInfo = await getUserInfo();
 
-//   realm.write(() => {
-//     const data = realm.objectForPrimaryKey<UserTypes>("UserInformation", 1)!;
+    if (userInfo) {
+      await setUserPhoto(path, userInfo[0].id);
+    }
+  }
 
-//     data.profile = path;
-//   });
-// }
+  yield call(awaitFunction);
+}
 
 export default all([
   takeLatest("CHANGE_USER_NAME", seveUserNameIntoWatermelondb),
-  // takeLatest("CHANGE_USER_PHOTO", seveUserPhotoIntoRealm),
+  takeLatest("CHANGE_USER_PHOTO", seveUserPhotoIntoWatermelondb),
 ]);
 
 export {};
