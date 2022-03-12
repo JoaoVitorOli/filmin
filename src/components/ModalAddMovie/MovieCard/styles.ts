@@ -17,13 +17,14 @@ export const styles = StyleSheet.create({
 
   card: {
     backgroundColor: theme.colors.background,
-    marginHorizontal: 5,
     marginVertical: 4,
     borderRadius: 12,
     paddingHorizontal: 15,
     paddingVertical: 10,
     flexDirection: "row",
-    alignItems: "center"
+    alignItems: "center",
+    borderWidth: 2,
+    borderColor: "transparent",
   },
 
   image: { 
@@ -35,5 +36,10 @@ export const styles = StyleSheet.create({
 
   middle: {
     flex: 1
+  },
+
+  selected: {
+    borderColor: theme.colors.purple,
+    backgroundColor: "#4124C330",
   }
 });

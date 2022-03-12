@@ -1,23 +1,32 @@
-import React, { memo } from "react";
-import { StyleSheet, Text, TouchableHighlight, View } from "react-native";
+import React, { memo, useEffect } from "react";
+import { StyleSheet, Text, TouchableHighlight, TouchableOpacity, View } from "react-native";
 import FastImage from "react-native-fast-image";
 import Icon from 'react-native-vector-icons/AntDesign';
 
 import { styles } from "./styles";
 
-interface MovieCardProps {
-  item: {
-    name: string;
-    posterPath: string;
-    date: string;
-  }
+interface MovieProps {
+  id: number;
+  name: string;
+  posterPath: string;
+  averange: number;
+  date: string;
+  isChecked: boolean;
 }
 
-function MovieCard({ item }: MovieCardProps) {
-  console.log(item);
+interface MovieCardProps {
+  item: MovieProps;
+  selected: boolean;
+  handleSelectMovie: (item: MovieProps) => void,
+}
 
+function MovieCard({ item, selected, handleSelectMovie }: MovieCardProps) {
   return (
-    <View style={styles.card}>
+    <TouchableOpacity 
+      style={[styles.card, selected && styles.selected]}
+      activeOpacity={0.8}
+      onPress={() => handleSelectMovie(item)}
+    >
       <FastImage
         style={styles.image}
         source={{
@@ -37,8 +46,10 @@ function MovieCard({ item }: MovieCardProps) {
           }
         </Text>
       </View>
-    </View> 
+    </TouchableOpacity> 
   )
 }
 
-export default memo(MovieCard);
+export default memo(MovieCard, (prevProps, nextProps) => {
+  return Object.is(prevProps.item, nextProps.item);
+});

@@ -61,6 +61,6 @@ export const styles = StyleSheet.create({
   movieListContainer: {
     marginVertical: 20,
     width: "100%",
-    height: "50%",
+    height: "60%",
   }
 })

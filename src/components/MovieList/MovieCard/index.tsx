@@ -1,4 +1,4 @@
-import React, { memo, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { Text, TouchableHighlight, View } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import FastImage from 'react-native-fast-image';
@@ -89,4 +89,6 @@ function MovieCard({ item }: IMoviesProps) {
   );
 }
 
-export default memo(MovieCard);
+export default memo(MovieCard, (prevProps, nextProps) => {
+  return Object.is(prevProps.item, nextProps.item);
+});

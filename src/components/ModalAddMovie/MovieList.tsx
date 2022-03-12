@@ -6,6 +6,7 @@ import {
   TouchableHighlight, 
   View
 } from "react-native";
+import FastImage from "react-native-fast-image";
 import Icon from 'react-native-vector-icons/AntDesign';
 import { movies } from "../../data/movies2";
 import { theme } from "../../styles/theme";
@@ -16,14 +17,11 @@ interface MoviesTypes {
   id: number,
   name: string,
   posterPath: string,
-  averange: string,
+  averange: number,
   date: string,
   isChecked: boolean
 } 
 
-interface MovieListProps {
-  movies: MoviesTypes[]
-}
 
 interface IMoviesItemProps {
   name: string;
@@ -32,31 +30,20 @@ interface IMoviesItemProps {
 }
 
 interface IMoviesProps {
-  item: IMoviesItemProps
+  item: MoviesTypes
 }
 
-const renderItem = ({ item }: IMoviesProps) => {
-  return (
-    <Suspense fallback={
-      <Text style={{color: theme.colors.text}}>Carregando...</Text>
-    }>
-      <MovieCard
-        item={{
-          date: item.date,
-          name: item.name,
-          posterPath: item.posterPath
-        }}
-      />
-    </Suspense>
-  )
-};
+interface MovieListProps {
+  handleSelectMovie: (item: MoviesTypes) => void;
+  movies: MoviesTypes[];
+  movieSelected: MoviesTypes;
+}
 
 export function MovieList({
-  movies
+  movies,
+  handleSelectMovie,
+  movieSelected
 }: MovieListProps) {
-
-  console.log(movies[0]);
-
   const TOTAL_OF_PAGE_NUMBER = movies.length / 10;
 
   const [pages, setPages] = useState(1);
@@ -98,6 +85,27 @@ export function MovieList({
     }
   }
 
+  const renderItem = ({ item }: IMoviesProps) => {
+    return (
+      <Suspense fallback={
+        <Text style={{color: theme.colors.text}}>Carregando...</Text>
+      }>
+        <MovieCard
+          selected={movieSelected.id === item.id}
+          handleSelectMovie={handleSelectMovie}
+          item={{
+            id: item.id,
+            averange: item.averange,
+            isChecked: item.isChecked,
+            date: item.date,
+            name: item.name,
+            posterPath: item.posterPath
+          }}
+        />
+      </Suspense>
+    )
+  };
+
   return (
     <FlatList
       data={moviesState}
@@ -107,16 +115,12 @@ export function MovieList({
       initialNumToRender={2}
       onEndReached={onEnd}
       style={styles.list}
-      // ListFooterComponent={
-      //   <View style={{
-      //     height: 30
-      //   }} />
-      // }
-      // ListHeaderComponent={
-      //   <View style={{
-      //     height: 6
-      //   }} />
-      // }
+      ListHeaderComponent={
+        <FastImage 
+          style={styles.TMDBLogo}
+          source={require("../../assets/tmdb-logo.png")}
+        />
+      }
     /> 
   )
 }
@@ -125,5 +129,12 @@ const styles = StyleSheet.create({
   list: {
     width: "100%",
     height: "100%",
-  }
+    borderRadius: 12,
+  },
+
+  TMDBLogo: {
+    width: 115,
+    height: 15,
+    marginVertical: 8
+  },
 })

@@ -1,5 +1,16 @@
-import { Button, Keyboard, Modal, Text, TextInput, TouchableOpacity, View } from "react-native";
-import React, { useEffect, useRef, useState } from 'react';
+import { 
+  Keyboard, 
+  Modal, 
+  Text, 
+  TouchableOpacity, 
+  View 
+} from "react-native";
+import React, { 
+  useCallback,
+  useEffect, 
+  useRef, 
+  useState 
+} from 'react';
 import { default as IconFeather } from 'react-native-vector-icons/Feather';
 import NetInfo from "@react-native-community/netinfo";
 
@@ -15,22 +26,52 @@ interface ModalAddMovieProps {
   closeModal: () => void;
 }
 
+interface MovieProps {
+  id: number;
+  name: string;
+  posterPath: string;
+  averange: number;
+  date: string;
+  isChecked: boolean;
+}
+
 export function ModalAddMovie({ 
   isVisible,
   closeModal
 }: ModalAddMovieProps) {
   const [movieName, setMovieName] = useState("");
+  const [selectedMovie, setSelectedMovie] = useState({} as MovieProps);
   const [movies, setMovies] = useState([]);
   const [hasConnection, setHasConnection] = useState(true);
   const [totalResults, setTotalResults] = useState(true);
+  const [isKeyShowing, setIsKeyShowing] = useState(false);
 
-  // useEffect(() => {
-  //   console.log(movies);
-  // }, [movies]);
+  useEffect(() => {
+    Keyboard.addListener('keyboardDidShow', () => setIsKeyShowing(true));
+    Keyboard.addListener('keyboardDidHide', () => setIsKeyShowing(false));
 
-  function setMovieText(value: string) {
+    return () => {
+      Keyboard.removeAllListeners("keyboardDidShow");
+      Keyboard.removeAllListeners("keyboardDidHide");
+    }
+  }, [Keyboard]);
+
+  const setMovieText = useCallback((value: string) => {
     setMovieName(value);
-  }
+  }, []);
+
+  const handleSelectMovie = useCallback((item: MovieProps) => {
+    const data = {
+      id: item.id,
+      name: item.name,
+      posterPath: `https://image.tmdb.org/t/p/w200${item.posterPath}`,
+      averange: item.averange,
+      date: item.date,
+      isChecked: false
+    }
+
+    setSelectedMovie(data);
+  }, [selectedMovie]);
 
   async function handleFetchMovie() {
     if (!movieName) {
@@ -39,11 +80,11 @@ export function ModalAddMovie({
 
     let isConnected = true;
 
-    const unsubscribe = NetInfo.addEventListener(state => {
+    const checkUserConnection = NetInfo.addEventListener(state => {
       isConnected = state.isConnected!;
     });
 
-    unsubscribe();
+    checkUserConnection();
 
     if (!isConnected) {
       setHasConnection(false);
@@ -114,11 +155,15 @@ export function ModalAddMovie({
             </TouchableOpacity>
           </View>
 
-          <View style={styles.movieListContainer}>
-            <MovieList
-              movies={movies}
-            />
-          </View>
+          {!isKeyShowing && movies.length > 0 && (
+            <View style={styles.movieListContainer}>
+              <MovieList
+                movieSelected={selectedMovie}
+                movies={movies}
+                handleSelectMovie={handleSelectMovie}
+              />
+            </View>
+          )}
 
           <TouchableOpacity 
             onPress={() => {}} 
