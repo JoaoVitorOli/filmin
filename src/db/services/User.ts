@@ -1,4 +1,3 @@
-import { Q } from "@nozbe/watermelondb";
 import { database } from "../index.native";
 import User from "../model/User";
 

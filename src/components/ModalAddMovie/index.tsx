@@ -1,4 +1,5 @@
 import { 
+  ActivityIndicator,
   Keyboard, 
   Modal, 
   Text, 
@@ -20,6 +21,8 @@ import { InputSearch } from "./InputSearch";
 import { styles } from "./styles";
 import { randomId } from "../../utils/randomId";
 import { MovieList } from "./MovieList";
+import { FetchMessageHandler } from "./FetchMessageHandler";
+import { theme } from "../../styles/theme";
 
 interface ModalAddMovieProps {
   isVisible: boolean;
@@ -42,9 +45,9 @@ export function ModalAddMovie({
   const [movieName, setMovieName] = useState("");
   const [selectedMovie, setSelectedMovie] = useState({} as MovieProps);
   const [movies, setMovies] = useState([]);
-  const [hasConnection, setHasConnection] = useState(true);
-  const [totalResults, setTotalResults] = useState(true);
+  const [hasAnyUnforeseen, setHasAnyUnforeseen] = useState("");
   const [isKeyShowing, setIsKeyShowing] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
 
   useEffect(() => {
     Keyboard.addListener('keyboardDidShow', () => setIsKeyShowing(true));
@@ -56,11 +59,15 @@ export function ModalAddMovie({
     }
   }, [Keyboard]);
 
+  useEffect(() => {
+    console.log(selectedMovie);
+  }, [selectedMovie]);
+
   const setMovieText = useCallback((value: string) => {
     setMovieName(value);
   }, []);
 
-  const handleSelectMovie = useCallback((item: MovieProps) => {
+  function handleSelectMovie(item: MovieProps) {
     const data = {
       id: item.id,
       name: item.name,
@@ -71,7 +78,7 @@ export function ModalAddMovie({
     }
 
     setSelectedMovie(data);
-  }, [selectedMovie]);
+  };
 
   async function handleFetchMovie() {
     if (!movieName) {
@@ -87,14 +94,13 @@ export function ModalAddMovie({
     checkUserConnection();
 
     if (!isConnected) {
-      setHasConnection(false);
+      setHasAnyUnforeseen("noConnection");
     } else {
-      setHasConnection(true);
+      setHasAnyUnforeseen("");
     }
 
     try {
-      // setHasError(false);
-      // setIsFetching(true);
+      setIsFetching(true);
 
       const response = await fetch(`${process.env.TMDB_BASEAPI}?api_key=${process.env.TMDB_KEY}&language=pt-BR&query=${encodeURI(movieName)}&page=1&include_adult=false`, {
         method: "GET"
@@ -104,9 +110,18 @@ export function ModalAddMovie({
 
       Keyboard.dismiss();
 
-      setTotalResults(data.total_results);
+      if (data.total_results === 0) {
+        setHasAnyUnforeseen("noResults");
+        setIsFetching(false);
+        return;
+      }
 
-      const dataFiltered = data.results.map((movie: { title: string; poster_path: string; vote_average: string; release_date: string; }) => {
+      const dataFiltered = data.results.map((movie: { 
+        title: string; 
+        poster_path: string; 
+        vote_average: string; 
+        release_date: string; 
+      }) => {
         return {
           id: randomId(),
           name: movie.title,
@@ -117,12 +132,12 @@ export function ModalAddMovie({
         }
       });
 
-      // setIsFetching(false);
+      setIsFetching(false);
       setMovies(dataFiltered);
     } catch (error) {
       console.log(error);
-      // setIsFetching(false);
-      // setHasError(true);
+      setHasAnyUnforeseen("error");
+      setIsFetching(false);
     }
   }
 
@@ -147,15 +162,19 @@ export function ModalAddMovie({
               style={styles.buttonSearch}
               activeOpacity={0.8}
             >
-              <IconFeather
-                name="search"
-                size={20}
-                color={"#d2d2d2"}
-              />
+              {isFetching ? (
+                <ActivityIndicator size="small" color={theme.colors.text} />
+              ) : (
+                <IconFeather
+                  name="search"
+                  size={20}
+                  color={"#d2d2d2"}
+                />
+              )}
             </TouchableOpacity>
           </View>
 
-          {!isKeyShowing && movies.length > 0 && (
+          {!isKeyShowing && movies.length > 0 && !hasAnyUnforeseen && (
             <View style={styles.movieListContainer}>
               <MovieList
                 movieSelected={selectedMovie}
@@ -165,10 +184,17 @@ export function ModalAddMovie({
             </View>
           )}
 
+          {hasAnyUnforeseen !== "" && (
+            <FetchMessageHandler
+              unforeseen={hasAnyUnforeseen}
+            />
+          )}
+
           <TouchableOpacity 
             onPress={() => {}} 
-            style={styles.buttonAddMovie}
+            style={[styles.buttonAddMovie, !movieName && styles.buttonAddMovieDisabled]}
             activeOpacity={0.8}
+            disabled={!movieName}
           >
             <Text style={styles.text}>Adicionar</Text>
           </TouchableOpacity> 

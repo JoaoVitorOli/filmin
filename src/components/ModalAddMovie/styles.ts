@@ -58,6 +58,10 @@ export const styles = StyleSheet.create({
     borderRadius: 6
   },
 
+  buttonAddMovieDisabled: {
+    opacity: 0.4
+  },
+
   movieListContainer: {
     marginVertical: 20,
     width: "100%",

@@ -29,12 +29,10 @@ function MovieCard({ item, selected, handleSelectMovie }: MovieCardProps) {
     >
       <FastImage
         style={styles.image}
-        source={{
-          uri: item.posterPath 
-            ? `https://image.tmdb.org/t/p/w200/${item.posterPath}`
-            : "https://avatars.githubusercontent.com/u/56055282?v=4",
+        source={item.posterPath ? {
+          uri: `https://image.tmdb.org/t/p/w200/${item.posterPath}`,
           priority: FastImage.priority.low,
-        }}
+        } : require("../../../assets/image-empty.png")}
         resizeMode={FastImage.resizeMode.cover}
       />
 
