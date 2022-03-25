@@ -23,6 +23,7 @@ import { randomId } from "../../utils/randomId";
 import { MovieList } from "./MovieList";
 import { FetchMessageHandler } from "./FetchMessageHandler";
 import { theme } from "../../styles/theme";
+import { addNewMovie } from "../../db/services/Movie";
 
 interface ModalAddMovieProps {
   isVisible: boolean;
@@ -59,10 +60,6 @@ export function ModalAddMovie({
     }
   }, [Keyboard]);
 
-  useEffect(() => {
-    console.log(selectedMovie);
-  }, [selectedMovie]);
-
   const setMovieText = useCallback((value: string) => {
     setMovieName(value);
   }, []);
@@ -79,6 +76,10 @@ export function ModalAddMovie({
 
     setSelectedMovie(data);
   };
+
+  async function handleAddMovie() {
+    await addNewMovie(selectedMovie);
+  }
 
   async function handleFetchMovie() {
     if (!movieName) {
@@ -191,7 +192,7 @@ export function ModalAddMovie({
           )}
 
           <TouchableOpacity 
-            onPress={() => {}} 
+            onPress={() => handleAddMovie()} 
             style={[styles.buttonAddMovie, !movieName && styles.buttonAddMovieDisabled]}
             activeOpacity={0.8}
             disabled={!movieName}

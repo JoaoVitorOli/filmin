@@ -1,15 +1,29 @@
 import { database } from "../index.native";
 import Movie from "../model/Movie";
 
-export async function addNewMovie() {
+type MovieProps = {
+  name: string;
+  posterPath: string;
+  averange: number;
+  date: string;
+  isChecked: boolean;
+}
+
+export async function addNewMovie({
+  averange, 
+  date, 
+  isChecked, 
+  name, 
+  posterPath
+}: MovieProps) {
   try {
     await database.write(async () => {
       await database.get<Movie>("movies").create(movie => {
-        movie.name = "teste",
-        movie.date = "2020",
-        movie.averange = 5,
-        movie.isChecked = true,
-        movie.posterPath = "https://teste.com"
+        movie.name = name,
+        movie.date = date,
+        movie.averange = averange,
+        movie.isChecked = isChecked,
+        movie.posterPath = posterPath
       });
     });
   } catch (error) {
@@ -22,8 +36,6 @@ export async function getAllMovies() {
     const moviesCollection = database.get<Movie>("movies");
 
     const entries = await moviesCollection.query().fetch();
-
-    const data = [];
 
     entries.map(movie => {
       console.log(movie._raw);
