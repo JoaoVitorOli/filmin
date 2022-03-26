@@ -2,6 +2,7 @@ import { database } from "../index.native";
 import Movie from "../model/Movie";
 
 type MovieProps = {
+  id: string | number;
   name: string;
   posterPath: string;
   averange: number;
@@ -35,11 +36,24 @@ export async function getAllMovies() {
   try {
     const moviesCollection = database.get<Movie>("movies");
 
+    let data: MovieProps[] = [];
+
     const entries = await moviesCollection.query().fetch();
 
-    entries.map(movie => {
-      console.log(movie._raw);
-    });
+    if (entries.length > 0) {
+      data = entries.map(entrie => {
+        return {
+          id: entrie.id,
+          name: entrie.name!,
+          posterPath: entrie.posterPath!,
+          averange: entrie.averange!,
+          date: entrie.date!,
+          isChecked: entrie.isChecked!
+        }
+      });
+    }
+    
+    return data;
 
     // await database.write(async () => {
     //   await database.unsafeResetDatabase();

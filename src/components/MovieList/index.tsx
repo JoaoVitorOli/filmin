@@ -1,6 +1,7 @@
 import React, { 
   lazy, 
   Suspense, 
+  useEffect, 
   useState
 } from "react";
 import { 
@@ -8,10 +9,15 @@ import {
   Text, 
   FlatList, 
 } from "react-native";
+import withObservables from '@nozbe/with-observables';
+import { withDatabase } from '@nozbe/watermelondb/DatabaseProvider';
 
-import { movies } from "../../data/movies";
+// import { movies } from "../../data/movies";
 import { theme } from "../../styles/theme";
 import { styles } from "./styles";
+import { Model } from "@nozbe/watermelondb";
+import { database } from "../../db/index.native";
+import { getAllMovies } from "../../db/services/Movie";
 
 const MovieCard = lazy(() => import("./MovieCard"));
 
@@ -20,12 +26,16 @@ interface IMoviesProps {
 }
 
 interface IMoviesItemProps {
-  id: number;
+  id: string | number;
   name: string;
   posterPath: string;
   averange: number;
   date: string;
   isChecked: boolean;
+}
+
+interface MovieListProps {
+  movies: IMoviesItemProps[];
 }
 
 const renderItem = ({ item }: IMoviesProps) => {
@@ -40,7 +50,14 @@ const renderItem = ({ item }: IMoviesProps) => {
   )
 };
 
-export const MovieList = () => {
+// @ts-ignore
+export const MovieList = ({ movies }) => {  
+  // const [movies, setMovies] = useState<IMoviesItemProps[]>([]);
+
+  console.log("---------------------");
+  console.log(movies);
+  console.log("---------------------");
+
   const TOTAL_OF_PAGE_NUMBER = movies.length / 10;
 
   const [pages, setPages] = useState(1);
@@ -57,6 +74,16 @@ export const MovieList = () => {
 
     return movies;
   });
+
+  // useEffect(() => {
+  //   const getMovies = async () => {
+  //     const moviesFetched = await getAllMovies();
+  
+  //     setMovies(moviesFetched!);
+  //   };
+  
+  //   getMovies();
+  // }, []);
 
   const onEnd = () => {
     if (pages <= TOTAL_OF_PAGE_NUMBER) {
@@ -104,3 +131,12 @@ export const MovieList = () => {
   );
 }
 
+// const enhance = withObservables(['movies'], ({ movies }) => ({
+//   movies: movies.observe(),
+// }));
+
+// export const EnhancedMovieList = enhance(MovieList);
+
+export default withDatabase(withObservables(['movies'], ({ movies }) => ({
+  movies: database.collections.get('movies').query().observe(),
+}))(MovieList));
