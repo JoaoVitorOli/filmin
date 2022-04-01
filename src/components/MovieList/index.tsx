@@ -35,7 +35,7 @@ interface IMoviesItemProps {
 }
 
 interface MovieListProps {
-  movies: IMoviesItemProps[];
+  movies?: IMoviesItemProps[];
 }
 
 const renderItem = ({ item }: IMoviesProps) => {
@@ -51,7 +51,7 @@ const renderItem = ({ item }: IMoviesProps) => {
 };
 
 // @ts-ignore
-export const MovieList = ({ movies }) => {  
+const MovieList = ({ movies }) => {  
   // const [movies, setMovies] = useState<IMoviesItemProps[]>([]);
 
   console.log("---------------------");
@@ -131,12 +131,8 @@ export const MovieList = ({ movies }) => {
   );
 }
 
-// const enhance = withObservables(['movies'], ({ movies }) => ({
-//   movies: movies.observe(),
-// }));
-
-// export const EnhancedMovieList = enhance(MovieList);
-
-export default withDatabase(withObservables(['movies'], ({ movies }) => ({
+const enhance = withObservables([], () => ({
   movies: database.collections.get('movies').query().observe(),
-}))(MovieList));
+}));
+
+export default withDatabase(enhance(MovieList));
