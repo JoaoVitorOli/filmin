@@ -1,8 +1,9 @@
 import { database } from "../index.native";
 import Movie from "../model/Movie";
+import User from "../model/User";
 
 type MovieProps = {
-  id: string | number;
+  id?: string | number;
   name: string;
   posterPath: string;
   averange: number;
@@ -58,6 +59,22 @@ export async function getAllMovies() {
     // await database.write(async () => {
     //   await database.unsafeResetDatabase();
     // })
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function saveMovieToDatabase(movie: MovieProps) {
+  try {
+    await database.write(async () => {
+      await database.get<Movie>('user_info').create(user => {
+        user.name = movie.name,
+        user.date = movie.date,
+        user.averange = movie.averange,
+        user.isChecked = movie.isChecked,
+        user.posterPath = movie.posterPath
+      });
+    });
   } catch (error) {
     console.log(error);
   }

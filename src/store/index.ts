@@ -15,7 +15,7 @@ export interface IUserState {
 }
 
 interface IMovie {
-  id: number;
+  id?: number;
   name: string,
   posterPath: string,
   averange: number,

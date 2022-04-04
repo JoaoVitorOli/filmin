@@ -24,6 +24,7 @@ import { MovieList } from "./MovieList";
 import { FetchMessageHandler } from "./FetchMessageHandler";
 import { theme } from "../../styles/theme";
 import { addNewMovie } from "../../db/services/Movie";
+import { useDispatch } from "react-redux";
 
 interface ModalAddMovieProps {
   isVisible: boolean;
@@ -49,6 +50,8 @@ export function ModalAddMovie({
   const [hasAnyUnforeseen, setHasAnyUnforeseen] = useState("");
   const [isKeyShowing, setIsKeyShowing] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     Keyboard.addListener('keyboardDidShow', () => setIsKeyShowing(true));
@@ -78,7 +81,7 @@ export function ModalAddMovie({
   };
 
   async function handleAddMovie() {
-    await addNewMovie(selectedMovie);
+    dispatch(selectedMovie);
   }
 
   async function handleFetchMovie() {

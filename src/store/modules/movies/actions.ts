@@ -1,10 +1,10 @@
-interface IMovie {
-  id: number;
-  name: string,
-  posterPath: string,
-  averange: number,
-  date: string,
-  isChecked: boolean,
+type IMovie = {
+  id?: string | number;
+  name: string;
+  posterPath: string;
+  averange: number;
+  date: string;
+  isChecked: boolean;
 }
 
 export function setInitialMovies(movies: IMovie[]) {

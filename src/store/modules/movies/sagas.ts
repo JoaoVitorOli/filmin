@@ -1,4 +1,5 @@
-import { all, takeLatest } from "redux-saga/effects";
+import { all, call, takeLatest } from "redux-saga/effects";
+import { saveMovieToDatabase } from "../../../db/services/Movie";
 import { addMovie, checkMovie, deleteMovie, reorderMovies, addSharedMovies } from "./actions";
 
 type SaveMovieRequest = ReturnType<typeof addMovie>;
@@ -16,25 +17,23 @@ interface IMovie {
   isChecked: boolean,
 }
 
-// function* saveMovieIntoRealm({ payload }: SaveMovieRequest) {
-//   const { movie } = payload;
+function* saveMovieIntoWatermelondb({ payload }: SaveMovieRequest) {
+  const { movie } = payload;
 
-//   const data = {
-//     id: movie.id,
-//     name: movie.name,
-//     posterPath: movie.posterPath,
-//     averange: movie.averange,
-//     date: movie.date || "",
-//     isChecked: movie.isChecked,
-//     updatedAt: new Date()
-//   }
+  const data = {
+    name: movie.name,
+    posterPath: movie.posterPath,
+    averange: movie.averange,
+    date: movie.date || "",
+    isChecked: movie.isChecked
+  }
 
-//   const realm: Realm = yield getRealm();
+  async function awaitFunction() {
+    await saveMovieToDatabase(data);
+  }
 
-//   realm.write(() => {
-//     realm.create("Movie", data);
-//   });
-// }
+  yield call(awaitFunction);
+}
 
 // function* checkMovieRequest({ payload }: CheckMovieRequest) {
 //   const { movieId } = payload;
@@ -101,7 +100,8 @@ interface IMovie {
 // }
 
 export default all([
-  // takeLatest("ADD_MOVIE", saveMovieIntoRealm),
+  takeLatest("SET_INITIAL_MOVIES", saveMovieIntoWatermelondb),
+  takeLatest("ADD_MOVIE", saveMovieIntoWatermelondb),
   // takeLatest("CHECK_MOVIE", checkMovieRequest),
   // takeLatest("DELETE_MOVIE", deleteMovieRequest),
   // takeLatest("DELETE_ALL_CHECKED_MOVIE", deleteAllCheckedMovieRequest),

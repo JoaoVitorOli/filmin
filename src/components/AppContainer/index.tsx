@@ -8,7 +8,8 @@ import { createNewUser, getUserInfo } from "../../db/services/User";
 import { IUserState } from "../../store";
 import { randomName } from "../../utils/randomName";
 import { setInitialValue } from "../../store/modules/user/actions";
-import { addNewMovie, getAllMovies } from "../../db/services/Movie";
+import { getAllMovies } from "../../db/services/Movie";
+import { setInitialMovies } from "../../store/modules/movies/actions";
 
 interface AppContainer {
   children: ReactNode;
@@ -23,8 +24,11 @@ export function AppContainer({ children }: AppContainer) {
   }, []);
 
   async function getInitialMovies() {
-    // await addNewMovie();
-    getAllMovies();
+    const data = await getAllMovies();
+
+    if (data) {
+      dispatch(setInitialMovies(data));
+    }
   }
 
   async function verifyifUserInfoExist() {

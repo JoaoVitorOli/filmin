@@ -11,7 +11,6 @@ import { styles } from "./styles";
 
 interface IMoviesProps {
   item: {
-    id: string | number;
     name: string;
     posterPath: string;
     averange: number;

@@ -18,6 +18,9 @@ import { styles } from "./styles";
 import { Model } from "@nozbe/watermelondb";
 import { database } from "../../db/index.native";
 import { getAllMovies } from "../../db/services/Movie";
+import Movie from "../../db/model/Movie";
+import { useSelector } from "react-redux";
+import { IMovieState } from "../../store";
 
 const MovieCard = lazy(() => import("./MovieCard"));
 
@@ -26,7 +29,6 @@ interface IMoviesProps {
 }
 
 interface IMoviesItemProps {
-  id: string | number;
   name: string;
   posterPath: string;
   averange: number;
@@ -35,7 +37,7 @@ interface IMoviesItemProps {
 }
 
 interface MovieListProps {
-  movies?: IMoviesItemProps[];
+  movies?: Movie[];
 }
 
 const renderItem = ({ item }: IMoviesProps) => {
@@ -50,71 +52,60 @@ const renderItem = ({ item }: IMoviesProps) => {
   )
 };
 
-// @ts-ignore
-const MovieList = ({ movies }) => {  
-  // const [movies, setMovies] = useState<IMoviesItemProps[]>([]);
-
-  console.log("---------------------");
-  console.log(movies);
-  console.log("---------------------");
-
-  const TOTAL_OF_PAGE_NUMBER = movies.length / 10;
-
-  const [pages, setPages] = useState(1);
-  const [moviesState, setMoviesState] = useState(() => {
-    if (movies.length > 10) {
-      let moviesFiltered: IMoviesItemProps[] = [];
-
-      for (let index = 0; index < 10; index++) {
-        moviesFiltered.push(movies[index]);
-      }
-
-      return moviesFiltered;
-    }
-
-    return movies;
+export const MovieList = () => {
+  const movies = useSelector<IMovieState, IMoviesItemProps[]>(state => {
+    return state.movies;
   });
 
-  // useEffect(() => {
-  //   const getMovies = async () => {
-  //     const moviesFetched = await getAllMovies();
-  
-  //     setMovies(moviesFetched!);
-  //   };
-  
-  //   getMovies();
-  // }, []);
+  // console.log(movies);
 
-  const onEnd = () => {
-    if (pages <= TOTAL_OF_PAGE_NUMBER) {
-      const nextPage = pages + 1;
-      let moviesFiltered = moviesState;
+  // const TOTAL_OF_PAGE_NUMBER = movies.length / 10;
 
-      setPages(state => state + 1);
+  // const [pages, setPages] = useState(1);
+  // const [moviesState, setMoviesState] = useState(() => {
+  //   if (movies.length > 10) {
+  //     let moviesFiltered: IMoviesItemProps[] = [];
 
-      for (let index = pages * 10; index < nextPage * 10; index++) {
-        if (!movies[index]) {
-          index = nextPage * 10;
+  //     for (let index = 0; index < 10; index++) {
+  //       moviesFiltered.push(movies[index]);
+  //     }
 
-          return;
-        }
+  //     return moviesFiltered;
+  //   }
 
-        moviesFiltered.push(movies[index]);
-      }
+  //   return movies;
+  // });
 
-      setMoviesState(moviesFiltered);
-    }
-  }
+  // const onEnd = () => {
+  //   if (pages <= TOTAL_OF_PAGE_NUMBER) {
+  //     const nextPage = pages + 1;
+  //     let moviesFiltered = moviesState;
+
+  //     setPages(state => state + 1);
+
+  //     for (let index = pages * 10; index < nextPage * 10; index++) {
+  //       if (!movies[index]) {
+  //         index = nextPage * 10;
+
+  //         return;
+  //       }
+
+  //       moviesFiltered.push(movies[index]);
+  //     }
+
+  //     setMoviesState(moviesFiltered);
+  //   }
+  // }
 
   return (
     <View style={styles.container}>
       <FlatList
-        data={moviesState}
+        data={movies}
         renderItem={renderItem}
         removeClippedSubviews={true}
         maxToRenderPerBatch={10}
         initialNumToRender={10}
-        onEndReached={onEnd}
+        // onEndReached={onEnd}
         style={styles.list}
         ListFooterComponent={
           <View style={{
@@ -130,9 +121,3 @@ const MovieList = ({ movies }) => {
     </View>
   );
 }
-
-const enhance = withObservables([], () => ({
-  movies: database.collections.get('movies').query().observe(),
-}));
-
-export default withDatabase(enhance(MovieList));
