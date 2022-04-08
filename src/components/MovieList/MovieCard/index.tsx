@@ -6,7 +6,8 @@ import FastImage from 'react-native-fast-image';
 import { AirbnbRating } from "react-native-ratings";
 import { default as IconAntDesign } from 'react-native-vector-icons/AntDesign';
 import { database } from "../../../db/index.native";
-import { toggleCheckMovie } from "../../../db/services/Movie";
+import Movie from "../../../db/model/Movie";
+import { handleDeleteTask, toggleCheckMovie } from "../../../db/services/Movie";
 
 import { theme } from "../../../styles/theme";
 
@@ -24,6 +25,8 @@ interface IMoviesProps {
 }
 
 function MovieCard({ item }: IMoviesProps) {
+  const [check] = useState(item.isChecked);
+
   return (
     <View style={styles.card}>
       <BouncyCheckbox
@@ -31,12 +34,12 @@ function MovieCard({ item }: IMoviesProps) {
         fillColor={theme.colors.purple}
         unfillColor="transparent"
         iconStyle={{ 
-          borderColor: item.isChecked ? theme.colors.purple : theme.colors.gray,
+          borderColor: check ? theme.colors.purple : theme.colors.gray,
           borderRadius: 6,
           borderWidth: 2
         }}
-        isChecked={item.isChecked}
-        onPress={() => {toggleCheckMovie(item.id, !item.isChecked)}}
+        isChecked={check}
+        onPress={() => {toggleCheckMovie(item.id, !check)}}
       />
       <FastImage
         style={styles.image}
@@ -73,7 +76,7 @@ function MovieCard({ item }: IMoviesProps) {
 
       <TouchableHighlight
         style={styles.buttonExcludeMovie}
-        onPress={() => {}}
+        onPress={() => handleDeleteTask(item.id)}
         activeOpacity={0.5}
         underlayColor="#dddddd10"
       >
