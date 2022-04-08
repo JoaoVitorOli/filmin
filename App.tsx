@@ -5,7 +5,7 @@ import { Provider, useDispatch } from 'react-redux';
 
 import { AppContainer } from './src/components/AppContainer';
 import { Header } from './src/components/Header';
-import { MovieList } from './src/components/MovieList';
+import MovieList from './src/components/MovieList';
 import { database } from './src/db/index.native';
 import { getAllMovies } from './src/db/services/Movie';
 

@@ -1,3 +1,4 @@
+import { Asset } from "react-native-image-picker";
 import { database } from "../index.native";
 import User from "../model/User";
 

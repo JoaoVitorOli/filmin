@@ -12,12 +12,13 @@ import { default as IconFeather } from 'react-native-vector-icons/Feather';
 import { default as IconAntDesign } from 'react-native-vector-icons/AntDesign';
 import { launchImageLibrary } from "react-native-image-picker";
 
-import { Profile } from '../Profile';
+import Profile from '../Profile';
 
 import { theme } from '../../styles/theme';
 import { styles } from "./styles";
 import { changeUserName, changeUserPhoto } from '../../store/modules/user/actions';
 import { IUserState } from '../../store';
+import { getUserInfo, setUserName } from '../../db/services/User';
 
 export function ActionSheetProfile() {
   const dispatch = useDispatch();
@@ -29,7 +30,7 @@ export function ActionSheetProfile() {
     return state.user.profile;
   });
 
-  const handleChangeUserName = useCallback((input) => {
+  const handleChangeUserName = useCallback(async (input: string) => {
     dispatch(changeUserName(input));
 
     // ToastAndroid.showWithGravity(

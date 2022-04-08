@@ -29,6 +29,7 @@ interface IMoviesProps {
 }
 
 interface IMoviesItemProps {
+  id: string;
   name: string;
   posterPath: string;
   averange: number;
@@ -37,7 +38,7 @@ interface IMoviesItemProps {
 }
 
 interface MovieListProps {
-  movies?: Movie[];
+  movies: IMoviesItemProps[];
 }
 
 const renderItem = ({ item }: IMoviesProps) => {
@@ -52,18 +53,12 @@ const renderItem = ({ item }: IMoviesProps) => {
   )
 };
 
-export const MovieList = () => {
-  const movies = useSelector<IMovieState, IMoviesItemProps[]>(state => {
-    return state.movies;
-  });
-
-  // console.log(movies);
-
+const MovieList = ({ movies }: MovieListProps) => {
   // const TOTAL_OF_PAGE_NUMBER = movies.length / 10;
 
   // const [pages, setPages] = useState(1);
   // const [moviesState, setMoviesState] = useState(() => {
-  //   if (movies.length > 10) {
+  //   if (movies && movies.length > 10) {
   //     let moviesFiltered: IMoviesItemProps[] = [];
 
   //     for (let index = 0; index < 10; index++) {
@@ -100,7 +95,7 @@ export const MovieList = () => {
   return (
     <View style={styles.container}>
       <FlatList
-        data={movies}
+        data={movies.reverse()}
         renderItem={renderItem}
         removeClippedSubviews={true}
         maxToRenderPerBatch={10}
@@ -121,3 +116,14 @@ export const MovieList = () => {
     </View>
   );
 }
+
+const db = database.collections.get('movies');
+const observeMovies = () => db.query().observe();
+
+const enhance = withObservables([], () => ({
+  movies: observeMovies(),
+}));
+
+// @ts-ignore
+export default enhance(MovieList);
+// const EnhancerenderItem = enhance(renderItem);

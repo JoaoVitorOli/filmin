@@ -28,6 +28,10 @@ export async function addNewMovie({
         movie.posterPath = posterPath
       });
     });
+
+    // await database.write(async () => {
+    //   await database.unsafeResetDatabase();
+    // })
   } catch (error) {
     console.log(error);
   }
@@ -53,26 +57,22 @@ export async function getAllMovies() {
         }
       });
     }
-    
-    return data;
 
-    // await database.write(async () => {
-    //   await database.unsafeResetDatabase();
-    // })
+    return data;
   } catch (error) {
     console.log(error);
   }
 }
 
-export async function saveMovieToDatabase(movie: MovieProps) {
+export async function toggleCheckMovie(movieId: string, toggle: boolean) {
+  const userCollection = database.get<Movie>('movies');
+
   try {
     await database.write(async () => {
-      await database.get<Movie>('user_info').create(user => {
-        user.name = movie.name,
-        user.date = movie.date,
-        user.averange = movie.averange,
-        user.isChecked = movie.isChecked,
-        user.posterPath = movie.posterPath
+      const movie = await userCollection.find(movieId);
+
+      await movie.update(() => {
+        movie.isChecked = toggle;
       });
     });
   } catch (error) {

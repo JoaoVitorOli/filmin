@@ -6,12 +6,14 @@ import { SheetManager } from 'react-native-actions-sheet';
 import { useSelector } from 'react-redux';
 import { IUserState } from '../store';
 import FastImage from 'react-native-fast-image';
+import { database } from '../db/index.native';
+import withObservables from '@nozbe/with-observables';
 
 interface ProfileProps {
   isClickable?: boolean;
 }
 
-export function Profile({ isClickable = true }: ProfileProps) {
+export default function Profile({ isClickable = true }: ProfileProps) {
   function openActionSheetProfile() {
     SheetManager.show("profile_sheet");
   }

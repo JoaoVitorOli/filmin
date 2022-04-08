@@ -1,9 +1,12 @@
+import withObservables from "@nozbe/with-observables";
 import React, { memo, useEffect, useState } from "react";
 import { Text, TouchableHighlight, View } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import FastImage from 'react-native-fast-image';
 import { AirbnbRating } from "react-native-ratings";
 import { default as IconAntDesign } from 'react-native-vector-icons/AntDesign';
+import { database } from "../../../db/index.native";
+import { toggleCheckMovie } from "../../../db/services/Movie";
 
 import { theme } from "../../../styles/theme";
 
@@ -11,6 +14,7 @@ import { styles } from "./styles";
 
 interface IMoviesProps {
   item: {
+    id: string;
     name: string;
     posterPath: string;
     averange: number;
@@ -20,8 +24,6 @@ interface IMoviesProps {
 }
 
 function MovieCard({ item }: IMoviesProps) {
-  const [checkBoxValue, setCheckBoxValue] = useState(item.isChecked);
-
   return (
     <View style={styles.card}>
       <BouncyCheckbox
@@ -29,12 +31,12 @@ function MovieCard({ item }: IMoviesProps) {
         fillColor={theme.colors.purple}
         unfillColor="transparent"
         iconStyle={{ 
-          borderColor: checkBoxValue ? theme.colors.purple : theme.colors.gray,
+          borderColor: item.isChecked ? theme.colors.purple : theme.colors.gray,
           borderRadius: 6,
           borderWidth: 2
         }}
-        isChecked={checkBoxValue}
-        onPress={() => {setCheckBoxValue(!checkBoxValue)}}
+        isChecked={item.isChecked}
+        onPress={() => {toggleCheckMovie(item.id, !item.isChecked)}}
       />
       <FastImage
         style={styles.image}
@@ -75,7 +77,6 @@ function MovieCard({ item }: IMoviesProps) {
         activeOpacity={0.5}
         underlayColor="#dddddd10"
       >
-        
         <IconAntDesign 
           name="close"
           size={20}

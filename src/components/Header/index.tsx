@@ -5,7 +5,7 @@ import {
 } from "react-native";
 import FastImage from 'react-native-fast-image';
 
-import { Profile } from '../Profile';
+import Profile from '../Profile';
 import { ButtonAddMovie } from './ButtonAddMovie';
 import { ModalAddMovie } from '../ModalAddMovie';
 import { ActionSheetProfile } from '../ActionSheetProfile';

@@ -51,8 +51,6 @@ export function ModalAddMovie({
   const [isKeyShowing, setIsKeyShowing] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
 
-  const dispatch = useDispatch();
-
   useEffect(() => {
     Keyboard.addListener('keyboardDidShow', () => setIsKeyShowing(true));
     Keyboard.addListener('keyboardDidHide', () => setIsKeyShowing(false));
@@ -81,7 +79,8 @@ export function ModalAddMovie({
   };
 
   async function handleAddMovie() {
-    dispatch(selectedMovie);
+    await addNewMovie(selectedMovie);
+    closeModal();
   }
 
   async function handleFetchMovie() {
