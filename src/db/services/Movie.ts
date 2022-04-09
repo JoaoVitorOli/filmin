@@ -18,8 +18,6 @@ export async function addNewMovie({
   posterPath
 }: MovieProps) {
   try {
-    console.log(date);
-
     await database.write(async () => {
       await database.get<Movie>("movies").create(movie => {
         movie.name = name,
