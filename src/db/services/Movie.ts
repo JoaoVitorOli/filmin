@@ -8,13 +8,13 @@ type MovieProps = {
   posterPath: string;
   averange: number;
   date: string;
-  isChecked: boolean;
+  status: boolean;
 }
 
 export async function addNewMovie({
   averange, 
   date, 
-  isChecked, 
+  status, 
   name, 
   posterPath
 }: MovieProps) {
@@ -24,7 +24,7 @@ export async function addNewMovie({
         movie.name = name,
         movie.date = date,
         movie.averange = averange,
-        movie.isChecked = isChecked,
+        movie.status = status,
         movie.posterPath = posterPath
       });
     });
@@ -53,12 +53,12 @@ export async function getAllMovies() {
           posterPath: entrie.posterPath!,
           averange: entrie.averange!,
           date: entrie.date!,
-          isChecked: entrie.isChecked!
+          status: entrie.status!
         }
       });
     }
 
-    return data;
+    console.log(data);
   } catch (error) {
     console.log(error);
   }
@@ -71,8 +71,8 @@ export async function toggleCheckMovie(movieId: string, toggle: boolean) {
     await database.write(async () => {
       const movie = await userCollection.find(movieId);
 
-      await movie.update(() => {
-        movie.isChecked = toggle;
+      movie.update((item) => {
+        item.status = toggle;
       });
     });
   } catch (error) {

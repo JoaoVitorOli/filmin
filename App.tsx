@@ -15,15 +15,6 @@ import { store } from './src/store';
 import { theme } from './src/styles/theme';
 import { randomName } from './src/utils/randomName';
 
-type MovieProps = {
-  id: string | number;
-  name: string;
-  posterPath: string;
-  averange: number;
-  date: string;
-  isChecked: boolean;
-}
-
 const App = () => {
   // const [movies, setMovies] = useState<Model[]>([]);
 
@@ -44,6 +35,10 @@ const App = () => {
   
   //   getMovies();
   // }, []);
+
+  useEffect(() => {
+    getAllMovies();
+  }, []);
 
   return (
     <Provider store={store}>

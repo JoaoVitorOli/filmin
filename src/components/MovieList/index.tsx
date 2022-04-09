@@ -23,7 +23,7 @@ import { useSelector } from "react-redux";
 import { IMovieState } from "../../store";
 
 // const MemoMovieCard = lazy(() => import("./MovieCard"));
-import MovieCard from "./MovieCard";
+import { MovieCard } from "./MovieCard";
 
 interface IMoviesProps {
   item: IMoviesItemProps
@@ -48,7 +48,7 @@ const renderItem = ({ item }: IMoviesProps) => {
       <Text style={{color: theme.colors.text}}>Carregando...</Text>
     }>
       <MovieCard
-        item={item}
+        movies={item}
       />
     </Suspense>
   )

@@ -9,4 +9,5 @@ export default class Movie extends Model {
   @text("averange") averange: number | undefined;
   @text("date") date: string | undefined;
   @text("isChecked") isChecked: boolean | undefined;
+  @text("status") status: boolean | undefined;
 }

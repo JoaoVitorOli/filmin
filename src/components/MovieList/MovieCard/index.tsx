@@ -1,3 +1,4 @@
+import { Model } from "@nozbe/watermelondb";
 import withObservables from "@nozbe/with-observables";
 import React, { memo, useEffect, useState } from "react";
 import { Text, TouchableHighlight, View } from "react-native";
@@ -13,19 +14,21 @@ import { theme } from "../../../styles/theme";
 
 import { styles } from "./styles";
 
-interface IMoviesProps {
-  item: {
-    id: string;
-    name: string;
-    posterPath: string;
-    averange: number;
-    date: string;
-    isChecked: boolean;
-  }
+interface ItemsProps extends Model {
+  id: string;
+  name: string;
+  posterPath: string;
+  averange: number;
+  date: string;
+  status: boolean;
 }
 
-function MovieCard({ item }: IMoviesProps) {
-  const [check] = useState(item.isChecked);
+interface IMoviesProps {
+  movies: ItemsProps
+}
+
+function Component({ movies }: IMoviesProps) {
+  const [check] = useState(movies.status);
   // console.log(movies);
 
   return (
@@ -40,22 +43,22 @@ function MovieCard({ item }: IMoviesProps) {
           borderWidth: 2
         }}
         isChecked={check}
-        onPress={() => {toggleCheckMovie(item.id, !check)}}
+        onPress={() => {toggleCheckMovie(movies.id, !check)}}
       />
       <FastImage
         style={styles.image}
-        source={item.posterPath ? {
-          uri: `https://image.tmdb.org/t/p/w200/${item.posterPath}`,
+        source={movies.posterPath ? {
+          uri: `https://image.tmdb.org/t/p/w200/${movies.posterPath}`,
           priority: FastImage.priority.low,
         } : require("../../../assets/image-empty.png")}
         resizeMode={FastImage.resizeMode.cover}
       />
 
       <View style={styles.middle}>
-        <Text style={styles.title}>{item.name}</Text>
+        <Text style={styles.title}>{movies.name}</Text>
         <Text style={styles.date}>
           {
-            item.date && new Date(item.date).getFullYear()
+            movies.date && new Date(movies.date).getFullYear()
           }
         </Text>
         <AirbnbRating
@@ -77,7 +80,7 @@ function MovieCard({ item }: IMoviesProps) {
 
       <TouchableHighlight
         style={styles.buttonExcludeMovie}
-        onPress={() => handleDeleteTask(item.id)}
+        onPress={() => handleDeleteTask(movies.id)}
         activeOpacity={0.5}
         underlayColor="#dddddd10"
       >
@@ -91,15 +94,9 @@ function MovieCard({ item }: IMoviesProps) {
   );
 }
 
-const db = database.collections.get('movies');
-const observeMovies = () => db.query().observe();
-
-const enhance = withObservables(["movies"], ({ movies }) => ({
-  item: observeMovies(),
-}));
-
-// @ts-ignore
-export default enhance(MovieCard);
+export const MovieCard = withObservables(['movies'], ({ movies }) => ({
+  movies,
+}))(Component);
 
 // export default function MemoMovieCard() { memo(MovieCard, (prevProps, nextProps) => {
 //   return Object.is(prevProps.item, nextProps.item);
