@@ -11,7 +11,7 @@ interface MovieProps {
   posterPath: string;
   averange: number;
   date: string;
-  status: boolean;
+  checkStatus: number;
 }
 
 interface MovieCardProps {

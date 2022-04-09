@@ -7,12 +7,12 @@ import {
 export default schemaMigrations({
   migrations: [
     {
-      toVersion: 3,
+      toVersion: 4,
       steps: [
         addColumns({
           table: 'movies',
           columns: [
-            { name: 'status', type: 'boolean' },
+            { name: 'checkStatus', type: 'number' },
           ],
         }),
       ],

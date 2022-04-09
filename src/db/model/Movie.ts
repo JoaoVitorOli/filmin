@@ -8,6 +8,5 @@ export default class Movie extends Model {
   @text("posterPath") posterPath: string | undefined;
   @text("averange") averange: number | undefined;
   @text("date") date: string | undefined;
-  @text("isChecked") isChecked: boolean | undefined;
-  @text("status") status: boolean | undefined;
+  @text("checkStatus") checkStatus: number | undefined;
 }

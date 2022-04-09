@@ -19,7 +19,7 @@ interface MoviesTypes {
   posterPath: string,
   averange: number,
   date: string,
-  status: boolean
+  checkStatus: number
 } 
 
 
@@ -96,7 +96,7 @@ export function MovieList({
           item={{
             id: item.id,
             averange: item.averange,
-            status: item.status,
+            checkStatus: item.checkStatus,
             date: item.date,
             name: item.name,
             posterPath: item.posterPath

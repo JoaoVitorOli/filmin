@@ -1,7 +1,7 @@
 import { appSchema, tableSchema } from '@nozbe/watermelondb';
 
 export default appSchema({
-  version: 3,
+  version: 4,
   tables: [
     tableSchema({
       name: 'user_info',
@@ -17,8 +17,7 @@ export default appSchema({
         { name: 'posterPath', type: 'string' },
         { name: 'averange', type: 'number' },
         { name: 'date', type: 'number' },
-        { name: 'isChecked', type: 'boolean' },
-        { name: 'status', type: 'boolean' },
+        { name: 'checkStatus', type: 'number' },
       ]
     }),
   ]

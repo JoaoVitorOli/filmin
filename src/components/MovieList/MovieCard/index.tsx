@@ -20,7 +20,7 @@ interface ItemsProps extends Model {
   posterPath: string;
   averange: number;
   date: string;
-  status: boolean;
+  checkStatus: number;
 }
 
 interface IMoviesProps {
@@ -28,8 +28,15 @@ interface IMoviesProps {
 }
 
 function Component({ movies }: IMoviesProps) {
-  const [check] = useState(movies.status);
-  // console.log(movies);
+  const [check] = useState(movies.checkStatus === 1);
+  console.log(movies);
+
+  function handleCheckMovie() {
+    toggleCheckMovie(
+      movies.id, 
+      movies.checkStatus === 0 ? 1 : 0
+    );
+  }
 
   return (
     <View style={styles.card}>
@@ -43,7 +50,7 @@ function Component({ movies }: IMoviesProps) {
           borderWidth: 2
         }}
         isChecked={check}
-        onPress={() => {toggleCheckMovie(movies.id, !check)}}
+        onPress={() => {handleCheckMovie()}}
       />
       <FastImage
         style={styles.image}
@@ -58,7 +65,7 @@ function Component({ movies }: IMoviesProps) {
         <Text style={styles.title}>{movies.name}</Text>
         <Text style={styles.date}>
           {
-            movies.date && new Date(movies.date).getFullYear()
+            movies.date && movies.date
           }
         </Text>
         <AirbnbRating

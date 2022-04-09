@@ -1,6 +1,5 @@
 import { database } from "../index.native";
 import Movie from "../model/Movie";
-import User from "../model/User";
 
 type MovieProps = {
   id?: string | number;
@@ -8,23 +7,25 @@ type MovieProps = {
   posterPath: string;
   averange: number;
   date: string;
-  status: boolean;
+  checkStatus: number;
 }
 
 export async function addNewMovie({
   averange, 
   date, 
-  status, 
+  checkStatus, 
   name, 
   posterPath
 }: MovieProps) {
   try {
+    console.log(date);
+
     await database.write(async () => {
       await database.get<Movie>("movies").create(movie => {
         movie.name = name,
         movie.date = date,
         movie.averange = averange,
-        movie.status = status,
+        movie.checkStatus = checkStatus,
         movie.posterPath = posterPath
       });
     });
@@ -53,7 +54,7 @@ export async function getAllMovies() {
           posterPath: entrie.posterPath!,
           averange: entrie.averange!,
           date: entrie.date!,
-          status: entrie.status!
+          checkStatus: entrie.checkStatus!
         }
       });
     }
@@ -64,7 +65,7 @@ export async function getAllMovies() {
   }
 }
 
-export async function toggleCheckMovie(movieId: string, toggle: boolean) {
+export async function toggleCheckMovie(movieId: string, toggle: number) {
   const userCollection = database.get<Movie>('movies');
 
   try {
@@ -72,7 +73,9 @@ export async function toggleCheckMovie(movieId: string, toggle: boolean) {
       const movie = await userCollection.find(movieId);
 
       movie.update((item) => {
-        item.status = toggle;
+        console.log(toggle);
+        console.log(item.checkStatus);
+        item.checkStatus = 1;
       });
     });
   } catch (error) {

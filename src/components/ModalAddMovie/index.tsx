@@ -37,7 +37,7 @@ interface MovieProps {
   posterPath: string;
   averange: number;
   date: string;
-  status: boolean;
+  checkStatus: number;
 }
 
 export function ModalAddMovie({ 
@@ -70,10 +70,12 @@ export function ModalAddMovie({
       id: item.id,
       name: item.name,
       posterPath: `https://image.tmdb.org/t/p/w200${item.posterPath}`,
-      averange: item.averange,
-      date: item.date,
-      status: false
+      averange: Math.round(item.averange),
+      date: String(new Date(item.date).getFullYear()),
+      checkStatus: 0
     }
+
+    console.log(data)
 
     setSelectedMovie(data);
   };
