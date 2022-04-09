@@ -22,7 +22,8 @@ import Movie from "../../db/model/Movie";
 import { useSelector } from "react-redux";
 import { IMovieState } from "../../store";
 
-const MovieCard = lazy(() => import("./MovieCard"));
+// const MemoMovieCard = lazy(() => import("./MovieCard"));
+import MovieCard from "./MovieCard";
 
 interface IMoviesProps {
   item: IMoviesItemProps

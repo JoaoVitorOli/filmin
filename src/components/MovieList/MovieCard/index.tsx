@@ -26,6 +26,7 @@ interface IMoviesProps {
 
 function MovieCard({ item }: IMoviesProps) {
   const [check] = useState(item.isChecked);
+  // console.log(movies);
 
   return (
     <View style={styles.card}>
@@ -90,6 +91,16 @@ function MovieCard({ item }: IMoviesProps) {
   );
 }
 
-export default memo(MovieCard, (prevProps, nextProps) => {
-  return Object.is(prevProps.item, nextProps.item);
-});
+const db = database.collections.get('movies');
+const observeMovies = () => db.query().observe();
+
+const enhance = withObservables(["movies"], ({ movies }) => ({
+  item: observeMovies(),
+}));
+
+// @ts-ignore
+export default enhance(MovieCard);
+
+// export default function MemoMovieCard() { memo(MovieCard, (prevProps, nextProps) => {
+//   return Object.is(prevProps.item, nextProps.item);
+// })};

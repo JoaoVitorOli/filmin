@@ -72,7 +72,6 @@ export async function toggleCheckMovie(movieId: string, toggle: boolean) {
       const movie = await userCollection.find(movieId);
 
       await movie.update(() => {
-        console.log(movie.isChecked);
         movie.isChecked = toggle;
       });
     });
@@ -81,10 +80,10 @@ export async function toggleCheckMovie(movieId: string, toggle: boolean) {
   }
 }
 
-export async function handleDeleteTask(id: string) {
+export async function handleDeleteTask(movieId: string) {
   try {
     await database.write(async () => {
-      const movie = await database.get('movies').find(id);
+      const movie = await database.get('movies').find(movieId);
       await movie.destroyPermanently();
     });
   } catch (error) {
