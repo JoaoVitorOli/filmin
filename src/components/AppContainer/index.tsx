@@ -2,10 +2,13 @@ import { SafeAreaView, View } from "react-native";
 import React, { useEffect, ReactNode } from 'react';
 
 import { styles } from "./styles";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { createNewUser, getUserInfo } from "../../db/services/User";
 import { randomName } from "../../utils/randomName";
 import { setInitialValue } from "../../store/modules/user/actions";
+import { IMoviesWatchedState } from "../../store";
+import { getAllMovies } from "../../db/services/Movie";
+import { setMoviesWatched } from "../../store/modules/moviesWatched/actions";
 
 interface AppContainer {
   children: ReactNode;
@@ -16,7 +19,22 @@ export function AppContainer({ children }: AppContainer) {
 
   useEffect(() => {
     verifyifUserInfoExist();
+    setInitialMoviesWatched();
   }, []);
+
+  async function setInitialMoviesWatched() {
+    const movies = await getAllMovies();
+
+    let count = 0;
+
+    if (movies) {
+      movies.filter(movie => {
+        if (movie.movieStatus === "true") count++
+      });
+    }
+
+    dispatch(setMoviesWatched(count));
+  }
 
   async function verifyifUserInfoExist() {
     const userInfo = await getUserInfo();

@@ -13,8 +13,24 @@ import { ActionSheetProfile } from '../ActionSheetProfile';
 import { styles } from "./styles";
 import { useSelector } from 'react-redux';
 import { IUserState } from '../../store';
+import { database } from '../../db/index.native';
+import withObservables from '@nozbe/with-observables';
+import WatchedMovies from './WatchedMovies';
 
-export function Header() {
+interface IMoviesItemProps {
+  id: string;
+  name: string;
+  posterPath: string;
+  movieAverange: string;
+  movieDate: string;
+  movieStatus: string;
+}
+
+interface MovieListProps {
+  movies: IMoviesItemProps[];
+}
+
+function Header({ movies }: MovieListProps) {
   const [isModalAddMovieOpen, setIsModalAddMovieOpen] = useState(false);
 
   const userName = useSelector<IUserState, string>(state => {
@@ -62,7 +78,7 @@ export function Header() {
         </View>
 
         <View style={styles.bottom}>
-          <Text style={styles.textSmall}>0 filmes assistidos</Text>
+          <WatchedMovies />
 
           <ButtonAddMovie
             handleOpenModal={handleOpenModalAddMovie}
@@ -79,3 +95,13 @@ export function Header() {
     </View>
   )
 }
+
+const db = database.collections.get('movies');
+const observeMovies = () => db.query().observe();
+
+const enhance = withObservables([], () => ({
+  movies: observeMovies(),
+}));
+
+// @ts-ignore
+export default enhance(Header);

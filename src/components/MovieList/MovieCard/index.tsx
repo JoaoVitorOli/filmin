@@ -1,12 +1,15 @@
 import { Model } from "@nozbe/watermelondb";
 import withObservables from "@nozbe/with-observables";
-import React, { memo } from "react";
+import React, { memo, useEffect } from "react";
 import { Text, TouchableHighlight, View } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import FastImage from 'react-native-fast-image';
 import { AirbnbRating } from "react-native-ratings";
 import { default as IconAntDesign } from 'react-native-vector-icons/AntDesign';
+import { useDispatch, useSelector } from "react-redux";
 import { handleDeleteTask, toggleCheckMovie } from "../../../db/services/Movie";
+import { IMoviesWatched, IMoviesWatchedState } from "../../../store";
+import { setMoviesWatched } from "../../../store/modules/moviesWatched/actions";
 
 import { theme } from "../../../styles/theme";
 
@@ -26,11 +29,31 @@ interface IMoviesProps {
 }
 
 function Component({ movies }: IMoviesProps) {
+  const dispatch = useDispatch();
+
+  const moviesWatched = useSelector<IMoviesWatchedState, number>(state => {
+    return state.moviesWatched.count;
+  });
+
+  useEffect(() => {
+    if (movies.movieStatus === "false") {
+      dispatch(setMoviesWatched(moviesWatched - 1));
+    } else {
+      dispatch(setMoviesWatched(moviesWatched + 1));
+    }
+  }, []);
+
   function handleCheckMovie() {
     toggleCheckMovie(
       movies.id, 
       movies.movieStatus === "false" ? "true" : "false"
     );
+
+    if (movies.movieStatus === "false") {
+      dispatch(setMoviesWatched(moviesWatched + 1));
+    } else {
+      dispatch(setMoviesWatched(moviesWatched - 1));
+    }
   }
 
   return (

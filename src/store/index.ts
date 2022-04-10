@@ -23,6 +23,14 @@ interface IMovie {
   isChecked: boolean,
 }
 
+export interface IMoviesWatched{
+  count: number;
+}
+
+export interface IMoviesWatchedState {
+  moviesWatched: IMoviesWatched;
+}
+
 export interface IMovieState {
   movies: IMovie[]
 }

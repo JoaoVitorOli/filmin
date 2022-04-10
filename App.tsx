@@ -3,7 +3,7 @@ import { StatusBar } from 'react-native';
 import { Provider } from 'react-redux';
 
 import { AppContainer } from './src/components/AppContainer';
-import { Header } from './src/components/Header';
+import Header from './src/components/Header';
 import MovieList from './src/components/MovieList';
 
 import { store } from './src/store';
