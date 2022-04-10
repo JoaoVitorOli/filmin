@@ -16,7 +16,7 @@
     "dotenv": "^16.0.0",
     "immer": "^9.0.12",
     "react": "17.0.2",
-    "react-native": "0.67.3",
+    "react-native": "0.68.0",
     "react-native-actions-sheet": "^0.6.0",
     "react-native-bouncy-checkbox": "^2.1.10",
     "react-native-fast-image": "^8.5.11",
@@ -35,7 +35,7 @@
     "@types/react-native": "^0.66.15",
     "@types/react-native-vector-icons": "^6.4.10",
     "@types/react-test-renderer": "^17.0.1",
-    "metro-react-native-babel-preset": "^0.66.2",
+    "metro-react-native-babel-preset": "^0.67.0",
     "react-test-renderer": "17.0.2",
     "typescript": "^4.4.4"
   },
