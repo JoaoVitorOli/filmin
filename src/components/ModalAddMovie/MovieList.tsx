@@ -17,11 +17,10 @@ interface MoviesTypes {
   id: number,
   name: string,
   posterPath: string,
-  averange: number,
-  date: string,
-  checkStatus: number
+  movieAverange: number,
+  movieDate: string,
+  movieStatus: string
 } 
-
 
 interface IMoviesItemProps {
   name: string;
@@ -95,9 +94,9 @@ export function MovieList({
           handleSelectMovie={handleSelectMovie}
           item={{
             id: item.id,
-            averange: item.averange,
-            checkStatus: item.checkStatus,
-            date: item.date,
+            movieAverange: item.movieAverange,
+            movieStatus: item.movieStatus,
+            movieDate: item.movieDate,
             name: item.name,
             posterPath: item.posterPath
           }}

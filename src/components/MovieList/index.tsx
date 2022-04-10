@@ -22,8 +22,8 @@ import Movie from "../../db/model/Movie";
 import { useSelector } from "react-redux";
 import { IMovieState } from "../../store";
 
-// const MemoMovieCard = lazy(() => import("./MovieCard"));
-import { MovieCard } from "./MovieCard";
+const MemoMovieCard = lazy(() => import("./MovieCard"));
+// import { MovieCard } from "./MovieCard";
 
 interface IMoviesProps {
   item: IMoviesItemProps
@@ -33,9 +33,9 @@ interface IMoviesItemProps {
   id: string;
   name: string;
   posterPath: string;
-  averange: number;
-  date: string;
-  isChecked: boolean;
+  movieAverange: string;
+  movieDate: string;
+  movieStatus: string;
 }
 
 interface MovieListProps {
@@ -47,7 +47,7 @@ const renderItem = ({ item }: IMoviesProps) => {
     <Suspense fallback={
       <Text style={{color: theme.colors.text}}>Carregando...</Text>
     }>
-      <MovieCard
+      <MemoMovieCard
         movies={item}
       />
     </Suspense>

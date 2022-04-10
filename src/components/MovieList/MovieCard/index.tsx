@@ -18,9 +18,9 @@ interface ItemsProps extends Model {
   id: string;
   name: string;
   posterPath: string;
-  averange: number;
-  date: string;
-  checkStatus: number;
+  movieAverange: string;
+  movieDate: string;
+  movieStatus: string;
 }
 
 interface IMoviesProps {
@@ -28,13 +28,10 @@ interface IMoviesProps {
 }
 
 function Component({ movies }: IMoviesProps) {
-  const [check] = useState(movies.checkStatus === 1);
-  console.log(movies);
-
   function handleCheckMovie() {
     toggleCheckMovie(
       movies.id, 
-      movies.checkStatus === 0 ? 1 : 0
+      movies.movieStatus === "false" ? "true" : "false"
     );
   }
 
@@ -45,11 +42,11 @@ function Component({ movies }: IMoviesProps) {
         fillColor={theme.colors.purple}
         unfillColor="transparent"
         iconStyle={{ 
-          borderColor: check ? theme.colors.purple : theme.colors.gray,
+          borderColor: movies.movieStatus === "true" ? theme.colors.purple : theme.colors.gray,
           borderRadius: 6,
           borderWidth: 2
         }}
-        isChecked={check}
+        isChecked={movies.movieStatus === "true"}
         onPress={() => {handleCheckMovie()}}
       />
       <FastImage
@@ -65,13 +62,13 @@ function Component({ movies }: IMoviesProps) {
         <Text style={styles.title}>{movies.name}</Text>
         <Text style={styles.date}>
           {
-            movies.date && movies.date
+            movies.movieDate && movies.movieDate
           }
         </Text>
         <AirbnbRating
           showRating={false}
           count={5}
-          defaultRating={8 / 2}
+          defaultRating={Number(movies.movieAverange) / 2}
           size={10}
           isDisabled
           reviewSize={1}
@@ -105,6 +102,6 @@ export const MovieCard = withObservables(['movies'], ({ movies }) => ({
   movies,
 }))(Component);
 
-// export default function MemoMovieCard() { memo(MovieCard, (prevProps, nextProps) => {
-//   return Object.is(prevProps.item, nextProps.item);
-// })};
+export default memo(MovieCard, (prevProps, nextProps) => {
+  return Object.is(prevProps.movies, nextProps.movies);
+});

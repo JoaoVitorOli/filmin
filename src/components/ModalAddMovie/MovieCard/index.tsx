@@ -9,9 +9,9 @@ interface MovieProps {
   id: number;
   name: string;
   posterPath: string;
-  averange: number;
-  date: string;
-  checkStatus: number;
+  movieAverange: number;
+  movieDate: string;
+  movieStatus: string;
 }
 
 interface MovieCardProps {
@@ -40,7 +40,7 @@ function MovieCard({ item, selected, handleSelectMovie }: MovieCardProps) {
         <Text style={styles.title}>{item.name}</Text>
         <Text style={styles.date}>
           {
-            item.date && new Date(item.date).getFullYear()
+            item.movieDate && new Date(item.movieDate).getFullYear()
           }
         </Text>
       </View>

@@ -24,7 +24,6 @@ import { MovieList } from "./MovieList";
 import { FetchMessageHandler } from "./FetchMessageHandler";
 import { theme } from "../../styles/theme";
 import { addNewMovie } from "../../db/services/Movie";
-import { useDispatch } from "react-redux";
 
 interface ModalAddMovieProps {
   isVisible: boolean;
@@ -35,9 +34,9 @@ interface MovieProps {
   id: number;
   name: string;
   posterPath: string;
-  averange: number;
-  date: string;
-  checkStatus: number;
+  movieAverange: number;
+  movieDate: string;
+  movieStatus: string;
 }
 
 export function ModalAddMovie({ 
@@ -70,12 +69,14 @@ export function ModalAddMovie({
       id: item.id,
       name: item.name,
       posterPath: `https://image.tmdb.org/t/p/w200${item.posterPath}`,
-      averange: Math.round(item.averange),
-      date: String(new Date(item.date).getFullYear()),
-      checkStatus: 0
+      movieAverange: item.movieAverange,
+      movieDate: String(item.movieDate),
+      movieStatus: "false"
     }
 
+    console.log("--------------------------")
     console.log(data)
+    console.log("--------------------------")
 
     setSelectedMovie(data);
   };
@@ -124,18 +125,22 @@ export function ModalAddMovie({
       const dataFiltered = data.results.map((movie: { 
         title: string; 
         poster_path: string; 
-        vote_average: string; 
+        vote_average: number; 
         release_date: string; 
       }) => {
         return {
           id: randomId(),
           name: movie.title,
           posterPath: movie.poster_path,
-          averange: movie.vote_average,
-          date: movie.release_date,
-          isChecked: false
+          movieAverange: Math.round(movie.vote_average),
+          movieDate: String(new Date(movie.release_date).getFullYear()),
+          movieStatus: "false"
         }
       });
+
+      console.log("opaopaopa");
+      console.log(dataFiltered);
+      console.log("opaopaopa");
 
       setIsFetching(false);
       setMovies(dataFiltered);

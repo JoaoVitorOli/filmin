@@ -1,7 +1,7 @@
 import { appSchema, tableSchema } from '@nozbe/watermelondb';
 
 export default appSchema({
-  version: 4,
+  version: 6,
   tables: [
     tableSchema({
       name: 'user_info',
@@ -15,9 +15,9 @@ export default appSchema({
       columns: [
         { name: 'name', type: 'string' },
         { name: 'posterPath', type: 'string' },
-        { name: 'averange', type: 'number' },
-        { name: 'date', type: 'number' },
-        { name: 'checkStatus', type: 'number' },
+        { name: 'movieAverange', type: 'string' },
+        { name: 'movieStatus', type: 'string' },
+        { name: 'movieDate', type: 'string' },
       ]
     }),
   ]

@@ -6,7 +6,7 @@ export default class Movie extends Model {
 
   @text("name") name: string | undefined;
   @text("posterPath") posterPath: string | undefined;
-  @text("averange") averange: number | undefined;
-  @text("date") date: string | undefined;
-  @text("checkStatus") checkStatus: number | undefined;
+  @text("movieAverange") movieAverange: string | undefined;
+  @text("movieDate") movieDate: string | undefined;
+  @text("movieStatus") movieStatus: string | undefined;
 }

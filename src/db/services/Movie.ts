@@ -5,15 +5,15 @@ type MovieProps = {
   id?: string | number;
   name: string;
   posterPath: string;
-  averange: number;
-  date: string;
-  checkStatus: number;
+  movieAverange: string | number;
+  movieDate: string;
+  movieStatus: string;
 }
 
 export async function addNewMovie({
-  averange, 
-  date, 
-  checkStatus, 
+  movieAverange, 
+  movieDate, 
+  movieStatus, 
   name, 
   posterPath
 }: MovieProps) {
@@ -21,9 +21,9 @@ export async function addNewMovie({
     await database.write(async () => {
       await database.get<Movie>("movies").create(movie => {
         movie.name = name,
-        movie.date = date,
-        movie.averange = averange,
-        movie.checkStatus = checkStatus,
+        movie.movieDate = movieDate,
+        movie.movieAverange = String(movieAverange),
+        movie.movieStatus = movieStatus,
         movie.posterPath = posterPath
       });
     });
@@ -50,9 +50,9 @@ export async function getAllMovies() {
           id: entrie.id,
           name: entrie.name!,
           posterPath: entrie.posterPath!,
-          averange: entrie.averange!,
-          date: entrie.date!,
-          checkStatus: entrie.checkStatus!
+          movieAverange: entrie.movieAverange!,
+          movieDate: entrie.movieDate!,
+          movieStatus: entrie.movieStatus!
         }
       });
     }
@@ -63,7 +63,7 @@ export async function getAllMovies() {
   }
 }
 
-export async function toggleCheckMovie(movieId: string, toggle: number) {
+export async function toggleCheckMovie(movieId: string, toggle: string) {
   const userCollection = database.get<Movie>('movies');
 
   try {
@@ -71,9 +71,7 @@ export async function toggleCheckMovie(movieId: string, toggle: number) {
       const movie = await userCollection.find(movieId);
 
       movie.update((item) => {
-        console.log(toggle);
-        console.log(item.checkStatus);
-        item.checkStatus = 1;
+        item.movieStatus = toggle;
       });
     });
   } catch (error) {
