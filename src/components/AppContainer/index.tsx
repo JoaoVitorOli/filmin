@@ -1,6 +1,5 @@
 import { SafeAreaView, View } from "react-native";
-import React, { useEffect } from 'react';
-import { ReactNode } from "react";
+import React, { useEffect, ReactNode } from 'react';
 
 import { styles } from "./styles";
 import { useDispatch } from "react-redux";
@@ -30,6 +29,7 @@ export function AppContainer({ children }: AppContainer) {
       }
 
       dispatch(setInitialValue(user));
+      createNewUser();
       
       return;
     }

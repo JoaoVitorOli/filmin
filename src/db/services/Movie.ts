@@ -32,7 +32,7 @@ export async function addNewMovie({
     //   await database.unsafeResetDatabase();
     // })
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
 
@@ -57,9 +57,9 @@ export async function getAllMovies() {
       });
     }
 
-    console.log(data);
+    return data;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
 
@@ -75,7 +75,7 @@ export async function toggleCheckMovie(movieId: string, toggle: string) {
       });
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
 
@@ -86,6 +86,6 @@ export async function handleDeleteTask(movieId: string) {
       await movie.destroyPermanently();
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }

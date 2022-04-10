@@ -1,8 +1,6 @@
 import React, { 
   lazy, 
   Suspense, 
-  useEffect, 
-  useState
 } from "react";
 import { 
   View, 
@@ -10,20 +8,12 @@ import {
   FlatList, 
 } from "react-native";
 import withObservables from '@nozbe/with-observables';
-import { withDatabase } from '@nozbe/watermelondb/DatabaseProvider';
 
-// import { movies } from "../../data/movies";
 import { theme } from "../../styles/theme";
 import { styles } from "./styles";
-import { Model } from "@nozbe/watermelondb";
 import { database } from "../../db/index.native";
-import { getAllMovies } from "../../db/services/Movie";
-import Movie from "../../db/model/Movie";
-import { useSelector } from "react-redux";
-import { IMovieState } from "../../store";
 
 const MemoMovieCard = lazy(() => import("./MovieCard"));
-// import { MovieCard } from "./MovieCard";
 
 interface IMoviesProps {
   item: IMoviesItemProps
@@ -127,4 +117,3 @@ const enhance = withObservables([], () => ({
 
 // @ts-ignore
 export default enhance(MovieList);
-// const EnhancerenderItem = enhance(renderItem);

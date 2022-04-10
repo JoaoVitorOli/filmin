@@ -15,7 +15,6 @@ const adapter = new SQLiteAdapter({
   }
 })
 
-// Then, make a Watermelon database from it!
 export const database = new Database({
   adapter,
   modelClasses: [

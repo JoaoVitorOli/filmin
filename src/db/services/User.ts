@@ -1,4 +1,3 @@
-import { Asset } from "react-native-image-picker";
 import { database } from "../index.native";
 import User from "../model/User";
 
@@ -17,7 +16,7 @@ export async function createNewUser(name = "", photo = "") {
       });
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
 
@@ -40,7 +39,7 @@ export async function getUserInfo() {
 
     return data;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
 
@@ -56,7 +55,7 @@ export async function setUserName(value: string, userId: string) {
       });
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
 
@@ -72,6 +71,6 @@ export async function setUserPhoto(value: string, userId: string) {
       });
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }

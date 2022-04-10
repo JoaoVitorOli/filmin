@@ -5,11 +5,6 @@ import { changeUserName, changeUserPhoto } from "./actions";
 type ChangeUserNameRequest = ReturnType<typeof changeUserName>;
 type ChangeUserPhotoRequest = ReturnType<typeof changeUserPhoto>;
 
-interface UserTypes {
-  id: number;
-  name: string;
-  profile: string;
-}
 
 function* seveUserNameIntoWatermelondb({ payload }: ChangeUserNameRequest) {
   const { userName } = payload;

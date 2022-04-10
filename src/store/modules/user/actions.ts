@@ -30,21 +30,3 @@ export function changeUserPhoto(path: string) {
     }
   }
 }
-
-// export function changeUserNameSuccess(user: IUserInfo) {
-//   return {
-//     type: "CHANGE_USER_NAME_SUCCESS",
-//     payload: {
-//       user
-//     }
-//   }
-// }
-
-// export function changeUserNameFailure(user: IUserInfo) {
-//   return {
-//     type: "CHANGE_USER_NAME_FAILURE",
-//     payload: {
-//       user
-//     }
-//   }
-// }

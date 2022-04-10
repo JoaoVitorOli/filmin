@@ -1,14 +1,15 @@
-import React, { lazy, Suspense, useEffect, useState } from "react";
+import React, { 
+  lazy, 
+  Suspense, 
+  useEffect, 
+  useState 
+} from "react";
 import { 
   FlatList, 
   StyleSheet, 
   Text, 
-  TouchableHighlight, 
-  View
 } from "react-native";
 import FastImage from "react-native-fast-image";
-import Icon from 'react-native-vector-icons/AntDesign';
-import { movies } from "../../data/movies2";
 import { theme } from "../../styles/theme";
 
 const MovieCard = lazy(() => import("./MovieCard"));

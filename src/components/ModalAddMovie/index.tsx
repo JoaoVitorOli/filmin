@@ -9,7 +9,6 @@ import {
 import React, { 
   useCallback,
   useEffect, 
-  useRef, 
   useState 
 } from 'react';
 import { default as IconFeather } from 'react-native-vector-icons/Feather';
@@ -74,10 +73,6 @@ export function ModalAddMovie({
       movieStatus: "false"
     }
 
-    console.log("--------------------------")
-    console.log(data)
-    console.log("--------------------------")
-
     setSelectedMovie(data);
   };
 
@@ -138,15 +133,10 @@ export function ModalAddMovie({
         }
       });
 
-      console.log("opaopaopa");
-      console.log(dataFiltered);
-      console.log("opaopaopa");
-
       setIsFetching(false);
       setMovies(dataFiltered);
     } catch (error) {
-      console.log(error);
-      setHasAnyUnforeseen("error");
+      console.error("error");
       setIsFetching(false);
     }
   }

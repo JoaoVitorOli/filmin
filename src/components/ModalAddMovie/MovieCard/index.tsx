@@ -1,7 +1,6 @@
-import React, { memo, useEffect } from "react";
-import { StyleSheet, Text, TouchableHighlight, TouchableOpacity, View } from "react-native";
+import React, { memo } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
 import FastImage from "react-native-fast-image";
-import Icon from 'react-native-vector-icons/AntDesign';
 
 import { styles } from "./styles";
 

@@ -1,11 +1,10 @@
 import { useDispatch, useSelector } from 'react-redux';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { 
   Text, 
   TextInput, 
   TouchableOpacity, 
   View,
-  ToastAndroid
 } from "react-native";
 import ActionSheet from "react-native-actions-sheet";
 import { default as IconFeather } from 'react-native-vector-icons/Feather';
@@ -16,9 +15,9 @@ import Profile from '../Profile';
 
 import { theme } from '../../styles/theme';
 import { styles } from "./styles";
+
 import { changeUserName, changeUserPhoto } from '../../store/modules/user/actions';
 import { IUserState } from '../../store';
-import { getUserInfo, setUserName } from '../../db/services/User';
 
 export function ActionSheetProfile() {
   const dispatch = useDispatch();
@@ -30,7 +29,7 @@ export function ActionSheetProfile() {
     return state.user.profile;
   });
 
-  const handleChangeUserName = useCallback(async (input: string) => {
+  async function handleChangeUserName(input: string) {
     dispatch(changeUserName(input));
 
     // ToastAndroid.showWithGravity(
@@ -38,7 +37,7 @@ export function ActionSheetProfile() {
     //   ToastAndroid.SHORT,
     //   ToastAndroid.CENTER
     // );
-  }, [inputName]);
+  };
 
   async function handleSelectImage() {
     const result = await launchImageLibrary({mediaType: "photo"});

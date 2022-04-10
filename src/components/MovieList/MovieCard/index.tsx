@@ -1,13 +1,11 @@
 import { Model } from "@nozbe/watermelondb";
 import withObservables from "@nozbe/with-observables";
-import React, { memo, useEffect, useState } from "react";
+import React, { memo } from "react";
 import { Text, TouchableHighlight, View } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import FastImage from 'react-native-fast-image';
 import { AirbnbRating } from "react-native-ratings";
 import { default as IconAntDesign } from 'react-native-vector-icons/AntDesign';
-import { database } from "../../../db/index.native";
-import Movie from "../../../db/model/Movie";
 import { handleDeleteTask, toggleCheckMovie } from "../../../db/services/Movie";
 
 import { theme } from "../../../styles/theme";
