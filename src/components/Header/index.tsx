@@ -10,14 +10,17 @@ import WatchedMovies from './WatchedMovies';
 import { ButtonAddMovie } from './ButtonAddMovie';
 import { ModalAddMovie } from '../ModalAddMovie';
 import { ActionSheetProfile } from '../ActionSheetProfile';
+import { moviesWatchedState } from '../../recoil/watchedMovies';
 
 import { styles } from "./styles";
 import { useRecoilValue } from 'recoil';
 import { userInfoState } from '../../recoil/userInfo';
+import { ButtonDeleteAllWatchedMovies } from './ButtonDeleteAllWatchedMovies';
 
 export default function Header() {
   const [isModalAddMovieOpen, setIsModalAddMovieOpen] = useState(false);
   const userInfo = useRecoilValue(userInfoState);
+  const moviesWatched = useRecoilValue(moviesWatchedState);
 
   function handleCloseModalAddMovie() {
     setIsModalAddMovieOpen(false);
@@ -62,9 +65,15 @@ export default function Header() {
         <View style={styles.bottom}>
           <WatchedMovies />
 
-          <ButtonAddMovie
-            handleOpenModal={handleOpenModalAddMovie}
-          />
+          <View style={styles.bottomButtonsContainer}>
+            {moviesWatched > 0 && (
+              <ButtonDeleteAllWatchedMovies />
+            )}
+
+            <ButtonAddMovie
+              handleOpenModal={handleOpenModalAddMovie}
+            />
+          </View>
         </View>
       </View>
 

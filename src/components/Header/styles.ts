@@ -65,6 +65,11 @@ export const styles = StyleSheet.create({
     marginTop: "auto"
   },
 
+  bottomButtonsContainer: {
+    flexDirection: "row",
+    alignItems: "flex-end"
+  },
+
   textSmall: {
     color: theme.colors.gray,
     fontFamily: "nunito_bold",

@@ -1,14 +1,14 @@
 import { Model } from "@nozbe/watermelondb";
 import withObservables from "@nozbe/with-observables";
-import React, { memo } from "react";
-import { Text, TouchableHighlight, View } from "react-native";
+import React, { memo, useRef } from "react";
+import { Animated, Text, TouchableHighlight, View } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import FastImage from 'react-native-fast-image';
 import { AirbnbRating } from "react-native-ratings";
 import { default as IconAntDesign } from 'react-native-vector-icons/AntDesign';
 import { useSetRecoilState } from "recoil";
 
-import { handleDeleteTask, toggleCheckMovie } from "../../../db/services/Movie";
+import { handleDeleteMovie, toggleCheckMovie } from "../../../db/services/Movie";
 import { moviesWatchedState } from "../../../recoil/watchedMovies";
 
 import { theme } from "../../../styles/theme";
@@ -30,6 +30,8 @@ interface IMoviesProps {
 
 function Component({ movies }: IMoviesProps) {
   const setWatchedMovies = useSetRecoilState(moviesWatchedState);
+  const fadeAnimation = useRef(new Animated.Value(1)).current;
+  const positionAnimation = useRef(new Animated.Value(0)).current;
 
   function handleCheckMovie() {
     toggleCheckMovie(
@@ -44,8 +46,40 @@ function Component({ movies }: IMoviesProps) {
     }
   }
 
+  function handleDeleteMovieWithAnimation() {
+    setTimeout(() => {
+      handleDeleteMovie(movies.id);
+
+      if (movies.movieStatus === "true") {
+        setWatchedMovies(state => state - 1);
+      }
+    }, 300);
+
+    Animated.timing(
+      fadeAnimation,
+      {
+        toValue: 0,
+        duration: 600,
+        useNativeDriver: true,
+      }
+    ).start();
+
+    Animated.timing(
+      positionAnimation,
+      {
+        toValue: -300,
+        duration: 350,
+        useNativeDriver: true,
+      }
+    ).start();
+  }
+
   return (
-    <View style={styles.card}>
+    <Animated.View style={{
+      ...styles.card,
+      opacity: fadeAnimation,
+      transform: [{translateX: positionAnimation}]
+    }}>
       <BouncyCheckbox
         size={20}
         fillColor={theme.colors.purple}
@@ -93,7 +127,7 @@ function Component({ movies }: IMoviesProps) {
 
       <TouchableHighlight
         style={styles.buttonExcludeMovie}
-        onPress={() => handleDeleteTask(movies.id)}
+        onPress={() => handleDeleteMovieWithAnimation()}
         activeOpacity={0.5}
         underlayColor="#dddddd10"
       >
@@ -103,7 +137,7 @@ function Component({ movies }: IMoviesProps) {
           color={"#D2D2D2"}
         />
       </TouchableHighlight>
-    </View>
+    </Animated.View>
   );
 }
 

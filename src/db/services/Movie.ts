@@ -1,3 +1,4 @@
+import { Q } from "@nozbe/watermelondb";
 import { database } from "../index.native";
 import Movie from "../model/Movie";
 
@@ -64,11 +65,11 @@ export async function getAllMovies() {
 }
 
 export async function toggleCheckMovie(movieId: string, toggle: string) {
-  const userCollection = database.get<Movie>('movies');
+  const moviesCollection = database.get<Movie>('movies');
 
   try {
     await database.write(async () => {
-      const movie = await userCollection.find(movieId);
+      const movie = await moviesCollection.find(movieId);
 
       movie.update((item) => {
         item.movieStatus = toggle;
@@ -79,11 +80,28 @@ export async function toggleCheckMovie(movieId: string, toggle: string) {
   }
 }
 
-export async function handleDeleteTask(movieId: string) {
+export async function handleDeleteMovie(movieId: string) {
   try {
     await database.write(async () => {
       const movie = await database.get('movies').find(movieId);
       await movie.destroyPermanently();
+    });
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function handleDeleteAllWatchedMovie() {
+  try {
+    await database.write(async () => {
+      const moviesWatched = await database
+        .get('movies')
+        .query(Q.where("movieStatus", "true"))
+        .fetch();
+
+      const deleted = moviesWatched.map(async movies => await movies.destroyPermanently())
+
+      database.batch(...deleted);
     });
   } catch (error) {
     console.error(error);

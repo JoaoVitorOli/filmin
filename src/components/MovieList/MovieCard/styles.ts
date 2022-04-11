@@ -23,7 +23,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 10,
     flexDirection: "row",
-    alignItems: "center"
+    alignItems: "center",
   },
 
   checkbox: {
