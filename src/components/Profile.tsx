@@ -3,22 +3,20 @@ import { TouchableOpacity } from "react-native";
 import Icon from 'react-native-vector-icons/Ionicons';
 import LinearGradient from "react-native-linear-gradient";
 import { SheetManager } from 'react-native-actions-sheet';
-import { useSelector } from 'react-redux';
-import { IUserState } from '../store';
 import FastImage from 'react-native-fast-image';
+import { useRecoilValue } from 'recoil';
+import { userInfoState } from '../recoil/userInfo';
 
 interface ProfileProps {
   isClickable?: boolean;
 }
 
 export default function Profile({ isClickable = true }: ProfileProps) {
+  const userInfo = useRecoilValue(userInfoState);
+  
   function openActionSheetProfile() {
     SheetManager.show("profile_sheet");
   }
-
-  const userPhoto = useSelector<IUserState, string>(state => {
-    return state.user.profile;
-  });
 
   return (
     <TouchableOpacity 
@@ -30,10 +28,10 @@ export default function Profile({ isClickable = true }: ProfileProps) {
         borderRadius: 12
       }}
     >
-      {userPhoto ? (
+      {userInfo.profile ? (
         <FastImage 
           source={{ 
-            uri: userPhoto,
+            uri: userInfo.profile,
             priority: FastImage.priority.low,
           }}
           style={{

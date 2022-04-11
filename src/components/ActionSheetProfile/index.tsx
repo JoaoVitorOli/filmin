@@ -1,4 +1,3 @@
-import { useDispatch, useSelector } from 'react-redux';
 import React, { useState } from 'react';
 import { 
   Text, 
@@ -10,27 +9,41 @@ import ActionSheet from "react-native-actions-sheet";
 import { default as IconFeather } from 'react-native-vector-icons/Feather';
 import { default as IconAntDesign } from 'react-native-vector-icons/AntDesign';
 import { launchImageLibrary } from "react-native-image-picker";
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
+import { userInfoState } from '../../recoil/userInfo';
 import Profile from '../Profile';
 
 import { theme } from '../../styles/theme';
 import { styles } from "./styles";
-
-import { changeUserName, changeUserPhoto } from '../../store/modules/user/actions';
-import { IUserState } from '../../store';
+import { getUserInfo, setUserName, setUserPhoto } from '../../db/services/User';
+import { randomName } from '../../utils/randomName';
 
 export function ActionSheetProfile() {
-  const dispatch = useDispatch();
+  const userInfoRecoil = useRecoilValue(userInfoState);
+  const setUserInfoRecoil = useSetRecoilState(userInfoState);
 
   const [inputName, setInputName] = useState("");
   const [isInputFocused, setIsInputFocused] = useState(false);
 
-  const userPhoto = useSelector<IUserState, string>(state => {
-    return state.user.profile;
-  });
-
   async function handleChangeUserName(input: string) {
-    dispatch(changeUserName(input));
+    try {
+      const userInfo = await getUserInfo();
+  
+      if (userInfo) {
+        const userName = input ? input : randomName();
+
+        await setUserName(userName, userInfo[0].id);
+  
+        setUserInfoRecoil({
+          id: 1,
+          name: userName,
+          profile: userInfoRecoil.profile
+        });
+      }
+    } catch (error) {
+      console.error(error);
+    }
 
     // ToastAndroid.showWithGravity(
     //   "All Your Base Are Belong To Us",
@@ -43,7 +56,21 @@ export function ActionSheetProfile() {
     const result = await launchImageLibrary({mediaType: "photo"});
 
     if (result.assets) {
-      dispatch(changeUserPhoto(result.assets[0].uri!));
+      try {
+        const userInfo = await getUserInfo();
+    
+        if (userInfo) {
+          await setUserPhoto(result.assets[0].uri!, userInfo[0].id);
+    
+          setUserInfoRecoil({
+            id: 1,
+            name: userInfo[0].name,
+            profile: result.assets[0].uri!
+          });
+        }
+      } catch (error) {
+        console.error(error);
+      }
 
       // toast.show({
       //   title: "Foto alterada",
@@ -54,7 +81,21 @@ export function ActionSheetProfile() {
   }
 
   async function handleDeleteProfileImage() {
-    dispatch(changeUserPhoto(""));
+    try {
+      const userInfo = await getUserInfo();
+  
+      if (userInfo) {
+        await setUserPhoto("", userInfo[0].id);
+  
+        setUserInfoRecoil({
+          id: 1,
+          name: userInfo[0].name,
+          profile: ""
+        });
+      }
+    } catch (error) {
+      console.error(error);
+    }
 
     // toast.show({
     //   title: "Foto removida",
@@ -91,10 +132,10 @@ export function ActionSheetProfile() {
             onPress={() => handleDeleteProfileImage()} 
             style={[styles.button, { 
               backgroundColor: theme.colors.danger,
-              opacity: !userPhoto ? 0.3 : 1
+              opacity: !userInfoRecoil.profile ? 0.3 : 1
             }]}
             activeOpacity={0}
-            disabled={!userPhoto}
+            disabled={!userInfoRecoil.profile}
           >
             <IconFeather
               name="trash"

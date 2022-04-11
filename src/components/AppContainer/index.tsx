@@ -1,21 +1,22 @@
 import { SafeAreaView, View } from "react-native";
 import React, { useEffect, ReactNode } from 'react';
-import { useDispatch } from "react-redux";
 
 import { createNewUser, getUserInfo } from "../../db/services/User";
 import { randomName } from "../../utils/randomName";
-import { setInitialValue } from "../../store/modules/user/actions";
 import { getAllMovies } from "../../db/services/Movie";
-import { setMoviesWatched } from "../../store/modules/moviesWatched/actions";
 
 import { styles } from "./styles";
+import { useSetRecoilState } from "recoil";
+import { moviesWatchedState } from "../../recoil/watchedMovies";
+import { userInfoState } from "../../recoil/userInfo";
 
 interface AppContainer {
   children: ReactNode;
 }
 
 export function AppContainer({ children }: AppContainer) {
-  const dispatch = useDispatch();
+  const setWatchedMovies = useSetRecoilState(moviesWatchedState);
+  const setUserInfo = useSetRecoilState(userInfoState);
 
   useEffect(() => {
     verifyifUserInfoExist();
@@ -33,7 +34,7 @@ export function AppContainer({ children }: AppContainer) {
       });
     }
 
-    dispatch(setMoviesWatched(count));
+    setWatchedMovies(count);
   }
 
   async function verifyifUserInfoExist() {
@@ -46,7 +47,7 @@ export function AppContainer({ children }: AppContainer) {
         profile: ""
       }
 
-      dispatch(setInitialValue(user));
+      setUserInfo(user);
       createNewUser();
       
       return;
@@ -60,7 +61,7 @@ export function AppContainer({ children }: AppContainer) {
           profile: userInfo[0].photo
         }
 
-        dispatch(setInitialValue(user));
+        setUserInfo(user);
 
         return;
       }
@@ -71,7 +72,7 @@ export function AppContainer({ children }: AppContainer) {
         profile: userInfo[0].photo
       }
 
-      dispatch(setInitialValue(user));
+      setUserInfo(user);
     }
   }
 
