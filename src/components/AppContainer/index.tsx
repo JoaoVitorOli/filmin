@@ -1,14 +1,14 @@
 import { SafeAreaView, View } from "react-native";
 import React, { useEffect, ReactNode } from 'react';
+import { useDispatch } from "react-redux";
 
-import { styles } from "./styles";
-import { useDispatch, useSelector } from "react-redux";
 import { createNewUser, getUserInfo } from "../../db/services/User";
 import { randomName } from "../../utils/randomName";
 import { setInitialValue } from "../../store/modules/user/actions";
-import { IMoviesWatchedState } from "../../store";
 import { getAllMovies } from "../../db/services/Movie";
 import { setMoviesWatched } from "../../store/modules/moviesWatched/actions";
+
+import { styles } from "./styles";
 
 interface AppContainer {
   children: ReactNode;
@@ -73,10 +73,6 @@ export function AppContainer({ children }: AppContainer) {
 
       dispatch(setInitialValue(user));
     }
-    
-    // await database.write(async () => {
-    //   await database.unsafeResetDatabase();
-    // })
   }
 
   return (

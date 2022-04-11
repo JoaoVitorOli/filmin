@@ -35,13 +35,6 @@ function Component({ movies }: IMoviesProps) {
     return state.moviesWatched.count;
   });
 
-  useEffect(() => {
-    if (movies.movieStatus === "false") {
-      dispatch(setMoviesWatched(moviesWatched - 1));
-    } else {
-      dispatch(setMoviesWatched(moviesWatched + 1));
-    }
-  }, []);
 
   function handleCheckMovie() {
     toggleCheckMovie(
