@@ -6,36 +6,18 @@ import {
 import FastImage from 'react-native-fast-image';
 
 import Profile from '../Profile';
+import WatchedMovies from './WatchedMovies';
 import { ButtonAddMovie } from './ButtonAddMovie';
 import { ModalAddMovie } from '../ModalAddMovie';
 import { ActionSheetProfile } from '../ActionSheetProfile';
 
 import { styles } from "./styles";
-import { useSelector } from 'react-redux';
-import { IUserState } from '../../store';
-import { database } from '../../db/index.native';
-import withObservables from '@nozbe/with-observables';
-import WatchedMovies from './WatchedMovies';
+import { useRecoilValue } from 'recoil';
+import { userInfoState } from '../../recoil/userInfo';
 
-interface IMoviesItemProps {
-  id: string;
-  name: string;
-  posterPath: string;
-  movieAverange: string;
-  movieDate: string;
-  movieStatus: string;
-}
-
-interface MovieListProps {
-  movies: IMoviesItemProps[];
-}
-
-function Header({ movies }: MovieListProps) {
+export default function Header() {
   const [isModalAddMovieOpen, setIsModalAddMovieOpen] = useState(false);
-
-  const userName = useSelector<IUserState, string>(state => {
-    return state.user.name;
-  });
+  const userInfo = useRecoilValue(userInfoState);
 
   function handleCloseModalAddMovie() {
     setIsModalAddMovieOpen(false);
@@ -73,7 +55,7 @@ function Header({ movies }: MovieListProps) {
             numberOfLines={1}
             style={[styles.text, { width: "85%" }]}
           >
-            {userName}?
+            {userInfo.name}?
           </Text>
         </View>
 
@@ -95,13 +77,3 @@ function Header({ movies }: MovieListProps) {
     </View>
   )
 }
-
-const db = database.collections.get('movies');
-const observeMovies = () => db.query().observe();
-
-const enhance = withObservables([], () => ({
-  movies: observeMovies(),
-}));
-
-// @ts-ignore
-export default enhance(Header);
