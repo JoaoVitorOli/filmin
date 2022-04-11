@@ -77,7 +77,17 @@ export function ModalAddMovie({
   };
 
   async function handleAddMovie() {
-    await addNewMovie(selectedMovie);
+    if (Object.entries(selectedMovie).length > 0) {
+      await addNewMovie(selectedMovie);
+    } else {
+      await addNewMovie({
+        name: movieName,
+        posterPath: "",
+        movieAverange: "",
+        movieDate: "",
+        movieStatus: "false",
+      });
+    }
     closeModal();
   }
 
