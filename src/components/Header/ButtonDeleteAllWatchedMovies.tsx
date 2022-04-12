@@ -6,15 +6,21 @@ import {
   TouchableOpacity 
 } from "react-native";
 import Icon from 'react-native-vector-icons/Feather';
+import Tooltip from 'react-native-walkthrough-tooltip';
 import { useSetRecoilState } from 'recoil';
 import { handleDeleteAllWatchedMovie } from '../../db/services/Movie';
+import { isFirstTimeOpenedState } from '../../recoil/isFirstTimeOpened';
 import { moviesWatchedState } from '../../recoil/watchedMovies';
 import { theme } from '../../styles/theme';
 
 export function ButtonDeleteAllWatchedMovies() {
   const setWatchedMovies = useSetRecoilState(moviesWatchedState);
+  const isFirstTimeOpened = useSetRecoilState(isFirstTimeOpenedState);
+
   const fadeAnimation = useRef(new Animated.Value(0)).current;
   const positionAnimation = useRef(new Animated.Value(20)).current;
+
+  const [isTooltipShowing, setIsTooltipShowing] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [timer, setTimer] = useState(0);
 
@@ -45,6 +51,7 @@ export function ButtonDeleteAllWatchedMovies() {
       timeOut;
     } else {
       setConfirmDelete(false);
+      setIsTooltipShowing(false);
     }
 
     return () => {
@@ -60,42 +67,53 @@ export function ButtonDeleteAllWatchedMovies() {
       return;
     }
 
+    setIsTooltipShowing(true);
     setConfirmDelete(true);
     setTimer(5);
   }
 
   return (
-    <Animated.View 
-      style={{
-        opacity: fadeAnimation,
-        transform: [{translateY: positionAnimation}]
+    <Tooltip
+      isVisible={isTooltipShowing}
+      backgroundColor={"transparent"}
+      backgroundStyle={{
+        backgroundColor: theme.colors.purple
       }}
+      content={<Text style={styles.textTooltip}>Apagar todos os filmes assistidos?</Text>}
+      placement="top"
+      onClose={() => {}}
     >
-      <TouchableOpacity 
-        onPress={() => showConfirmDeleteButton()}
+      <Animated.View 
         style={{
-          ...styles.button,
-          height: 37, 
-          width: 37, 
-          borderRadius: 12,
-          alignItems: "center",
-          justifyContent: "center",
-          backgroundColor: theme.colors.danger,
-          marginRight: 12
+          opacity: fadeAnimation,
+          transform: [{translateY: positionAnimation}]
         }}
-        activeOpacity={0.8}
       >
-        {confirmDelete ? (
-          <Text style={styles.count}>{timer}</Text>
-        ) : (
-          <Icon 
-            name="trash"
-            size={20}
-            color={"#fff"}
-          />
-        )}
-      </TouchableOpacity>
-    </Animated.View>
+        <TouchableOpacity 
+          onPress={() => showConfirmDeleteButton()}
+          style={{
+            ...styles.button,
+            height: 37, 
+            width: 37, 
+            borderRadius: 12,
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: theme.colors.danger,
+          }}
+          activeOpacity={0.8}
+        >
+          {confirmDelete ? (
+            <Text style={styles.count}>{timer}</Text>
+          ) : (
+            <Icon 
+              name="trash"
+              size={20}
+              color={"#fff"}
+            />
+          )}
+        </TouchableOpacity>
+      </Animated.View>
+    </Tooltip>
   );
 }
 
@@ -108,5 +126,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: "nunito_bold",
     color: theme.colors.text
+  },
+
+  textTooltip: {
+    color: theme.colors.text,
+    fontFamily: "nunito_bold",
   }
-})
+});

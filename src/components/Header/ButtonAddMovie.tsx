@@ -25,7 +25,8 @@ export function ButtonAddMovie({
           width: 47, 
           borderRadius: 12,
           alignItems: "center",
-          justifyContent: "center"
+          justifyContent: "center",
+          marginLeft: 12
         }}
       >
         <Icon 
