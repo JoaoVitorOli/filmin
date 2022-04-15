@@ -7,15 +7,16 @@ import {
 } from "react-native";
 import Icon from 'react-native-vector-icons/Feather';
 import Tooltip from 'react-native-walkthrough-tooltip';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { handleDeleteAllWatchedMovie } from '../../db/services/Movie';
 import { isFirstTimeOpenedState } from '../../recoil/isFirstTimeOpened';
 import { moviesWatchedState } from '../../recoil/watchedMovies';
 import { theme } from '../../styles/theme';
+import { setIfIsAppFirstTimeOpened } from '../../utils/asyncStorageFunctions';
 
 export function ButtonDeleteAllWatchedMovies() {
   const setWatchedMovies = useSetRecoilState(moviesWatchedState);
-  const isFirstTimeOpened = useSetRecoilState(isFirstTimeOpenedState);
+  const isFirstTimeOpened = useRecoilValue(isFirstTimeOpenedState);
 
   const fadeAnimation = useRef(new Animated.Value(0)).current;
   const positionAnimation = useRef(new Animated.Value(20)).current;
@@ -67,7 +68,11 @@ export function ButtonDeleteAllWatchedMovies() {
       return;
     }
 
-    setIsTooltipShowing(true);
+    if (isFirstTimeOpened) {
+      setIsTooltipShowing(true);
+      await setIfIsAppFirstTimeOpened();
+    }
+
     setConfirmDelete(true);
     setTimer(5);
   }

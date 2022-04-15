@@ -9,6 +9,8 @@ import { styles } from "./styles";
 import { useSetRecoilState } from "recoil";
 import { moviesWatchedState } from "../../recoil/watchedMovies";
 import { userInfoState } from "../../recoil/userInfo";
+import { isFirstTimeOpenedState } from "../../recoil/isFirstTimeOpened";
+import { getIfIsAppFirstTimeOpened } from "../../utils/asyncStorageFunctions";
 
 interface AppContainer {
   children: ReactNode;
@@ -17,8 +19,10 @@ interface AppContainer {
 export function AppContainer({ children }: AppContainer) {
   const setWatchedMovies = useSetRecoilState(moviesWatchedState);
   const setUserInfo = useSetRecoilState(userInfoState);
+  const setAppFirstTimeOpened = useSetRecoilState(isFirstTimeOpenedState);
 
   useEffect(() => {
+    verifyIfAppIsOpenedForTheFirstTime();
     verifyifUserInfoExist();
     setInitialMoviesWatched();
   }, []);
@@ -35,6 +39,19 @@ export function AppContainer({ children }: AppContainer) {
     }
 
     setWatchedMovies(count);
+  }
+
+  async function verifyIfAppIsOpenedForTheFirstTime() {
+    const isFirstTimeOpened = await getIfIsAppFirstTimeOpened();
+    console.log(isFirstTimeOpened);
+  
+    if (!isFirstTimeOpened && isFirstTimeOpened  !== null) {
+      setAppFirstTimeOpened(false);
+    }
+
+    // if (isFirstTimeOpened === null) {
+    //   setAppFirstTimeOpened(true);
+    // }
   }
 
   async function verifyifUserInfoExist() {
