@@ -1,17 +1,21 @@
 import React, { 
   lazy, 
-  Suspense, 
+  Suspense,
 } from "react";
 import { 
   View, 
+  FlatList,
   Text, 
-  FlatList, 
 } from "react-native";
 import withObservables from '@nozbe/with-observables';
+import LottieView from 'lottie-react-native';
 
 import { theme } from "../../styles/theme";
 import { styles } from "./styles";
 import { database } from "../../db/index.native";
+import { MovieSkeleton } from "./MovieSkeleton";
+
+import NoMovieLottie from "../../assets/no-movies.json";
 
 const MemoMovieCard = lazy(() => import("./MovieCard"));
 
@@ -35,7 +39,7 @@ interface MovieListProps {
 const renderItem = ({ item }: IMoviesProps) => {
   return (
     <Suspense fallback={
-      <Text style={{color: theme.colors.text}}>Carregando...</Text>
+      <MovieSkeleton />
     }>
       <MemoMovieCard
         movies={item}
@@ -85,25 +89,34 @@ const MovieList = ({ movies }: MovieListProps) => {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={movies.reverse()}
-        renderItem={renderItem}
-        removeClippedSubviews={true}
-        maxToRenderPerBatch={10}
-        initialNumToRender={10}
-        // onEndReached={onEnd}
-        style={styles.list}
-        ListFooterComponent={
-          <View style={{
-            height: 30
-          }} />
-        }
-        ListHeaderComponent={
-          <View style={{
-            height: 6
-          }} />
-        }
-      />
+      {movies.length === 0 ? (
+        <View style={styles.noMovies}>
+          <LottieView source={NoMovieLottie} autoPlay loop />
+          <Text style={styles.text}>
+            Sem filmes por aqui =(
+          </Text>
+        </View>
+      ) : (
+        <FlatList
+          data={movies.reverse()}
+          renderItem={renderItem}
+          removeClippedSubviews={true}
+          maxToRenderPerBatch={10}
+          initialNumToRender={10}
+          // onEndReached={onEnd}
+          style={styles.list}
+          ListFooterComponent={
+            <View style={{
+              height: 30
+            }} />
+          }
+          ListHeaderComponent={
+            <View style={{
+              height: 6
+            }} />
+          }
+        />
+      )}
     </View>
   );
 }

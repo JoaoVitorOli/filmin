@@ -78,5 +78,13 @@ export const styles = StyleSheet.create({
 
   profileContainer: {
     marginLeft: "auto"
+  },
+
+  nameSkeleton: {
+    backgroundColor: theme.colors.purpleTransparent,
+    height: 20,
+    width: 120,
+    marginTop: 8,
+    borderRadius: 5
   }
 });

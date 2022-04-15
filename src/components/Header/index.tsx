@@ -53,13 +53,17 @@ export default function Header() {
             <Text style={styles.text}>de hoje,</Text>
           </View>
           
-          <Text 
-            ellipsizeMode='tail'
-            numberOfLines={1}
-            style={[styles.text, { width: "85%" }]}
-          >
-            {userInfo.name}?
-          </Text>
+          {userInfo.name ? (
+            <Text 
+              ellipsizeMode='tail'
+              numberOfLines={1}
+              style={[styles.text, { width: "85%" }]}
+            >
+              {userInfo.name}?
+            </Text>
+          ) : (
+            <View style={styles.nameSkeleton} />
+          )}
         </View>
 
         <View style={styles.bottom}>
