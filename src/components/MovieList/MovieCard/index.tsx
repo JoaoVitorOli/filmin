@@ -6,6 +6,7 @@ import BouncyCheckbox from "react-native-bouncy-checkbox";
 import FastImage from 'react-native-fast-image';
 import { AirbnbRating } from "react-native-ratings";
 import { default as IconAntDesign } from 'react-native-vector-icons/AntDesign';
+import { default as IconFeather } from 'react-native-vector-icons/Feather';
 import { useSetRecoilState } from "recoil";
 
 import { handleDeleteMovie, toggleCheckMovie } from "../../../db/services/Movie";
@@ -77,6 +78,9 @@ function Component({ movies }: IMoviesProps) {
   return (
     <Animated.View style={{
       ...styles.card,
+      backgroundColor: movies.movieStatus === "false" 
+        ? theme.colors.shape 
+        : theme.colors.purpleTransparent,
       opacity: fadeAnimation,
       transform: [{translateX: positionAnimation}]
     }}>
@@ -93,7 +97,12 @@ function Component({ movies }: IMoviesProps) {
         onPress={() => {handleCheckMovie()}}
       />
       <FastImage
-        style={styles.image}
+        style={{
+          ...styles.image,
+          opacity: movies.movieStatus === "false" 
+            ? 1
+            : 0.3,
+        }}
         source={movies.posterPath ? {
           uri: `https://image.tmdb.org/t/p/w200/${movies.posterPath}`,
           priority: FastImage.priority.low,
@@ -101,7 +110,12 @@ function Component({ movies }: IMoviesProps) {
         resizeMode={FastImage.resizeMode.cover}
       />
 
-      <View style={styles.middle}>
+      <View style={{
+        ...styles.middle,
+        opacity: movies.movieStatus === "false" 
+            ? 1
+            : 0.3,
+      }}>
         <Text style={styles.title}>{movies.name}</Text>
         <Text style={styles.date}>
           {
@@ -131,11 +145,19 @@ function Component({ movies }: IMoviesProps) {
         activeOpacity={0.5}
         underlayColor="#dddddd10"
       >
-        <IconAntDesign 
-          name="close"
-          size={20}
-          color={"#D2D2D2"}
-        />
+        {movies.movieStatus === "true" ? (
+          <IconFeather 
+            name="trash"
+            size={20}
+            color={theme.colors.danger}
+          />
+        ) : (
+          <IconAntDesign 
+            name="close"
+            size={20}
+            color={"#D2D2D2"}
+          />
+        )}
       </TouchableHighlight>
     </Animated.View>
   );
