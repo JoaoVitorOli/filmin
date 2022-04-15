@@ -59,6 +59,10 @@ export function ModalAddMovie({
     }
   }, [Keyboard]);
 
+  // useEffect(() => {
+  //   console.log(selectedMovie);
+  // }, [selectedMovie]);
+
   const setMovieText = useCallback((value: string) => {
     setMovieName(value);
   }, []);
@@ -137,7 +141,7 @@ export function ModalAddMovie({
           id: randomId(),
           name: movie.title,
           posterPath: movie.poster_path,
-          movieAverange: Math.round(movie.vote_average),
+          movieAverange: movie.vote_average,
           movieDate: String(new Date(movie.release_date).getFullYear()),
           movieStatus: "false"
         }

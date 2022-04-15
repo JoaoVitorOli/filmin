@@ -4,7 +4,6 @@ import React, { memo, useRef } from "react";
 import { Animated, Text, TouchableHighlight, View } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import FastImage from 'react-native-fast-image';
-import { AirbnbRating } from "react-native-ratings";
 import { default as IconAntDesign } from 'react-native-vector-icons/AntDesign';
 import { default as IconFeather } from 'react-native-vector-icons/Feather';
 import { useSetRecoilState } from "recoil";
@@ -13,6 +12,7 @@ import { handleDeleteMovie, toggleCheckMovie } from "../../../db/services/Movie"
 import { moviesWatchedState } from "../../../recoil/watchedMovies";
 
 import { theme } from "../../../styles/theme";
+import { MovieRating } from "./MovieRating";
 
 import { styles } from "./styles";
 
@@ -122,21 +122,7 @@ function Component({ movies }: IMoviesProps) {
             movies.movieDate && movies.movieDate
           }
         </Text>
-        <AirbnbRating
-          showRating={false}
-          count={5}
-          defaultRating={Number(movies.movieAverange) / 2}
-          size={10}
-          isDisabled
-          reviewSize={1}
-          starContainerStyle={{
-            marginLeft: 0,
-            marginTop: 8
-          }}
-          ratingContainerStyle={{
-            marginRight: "auto",
-          }}
-        />
+        <MovieRating rating={Number(movies.movieAverange)} />
       </View>
 
       <TouchableHighlight

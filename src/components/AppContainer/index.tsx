@@ -43,15 +43,10 @@ export function AppContainer({ children }: AppContainer) {
 
   async function verifyIfAppIsOpenedForTheFirstTime() {
     const isFirstTimeOpened = await getIfIsAppFirstTimeOpened();
-    console.log(isFirstTimeOpened);
-  
+
     if (!isFirstTimeOpened && isFirstTimeOpened  !== null) {
       setAppFirstTimeOpened(false);
     }
-
-    // if (isFirstTimeOpened === null) {
-    //   setAppFirstTimeOpened(true);
-    // }
   }
 
   async function verifyifUserInfoExist() {
