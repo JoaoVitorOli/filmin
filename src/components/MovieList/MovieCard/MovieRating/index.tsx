@@ -21,7 +21,7 @@ export function MovieRating({ rating }: MovieRatingProps) {
         disableShadow
         isVisible={isTooltipShowing}
         backgroundColor={"transparent"}
-        backgroundStyle={{
+        contentStyle={{
           backgroundColor: theme.colors.purple
         }}
         content={

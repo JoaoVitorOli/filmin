@@ -84,6 +84,9 @@ export function ButtonDeleteAllWatchedMovies() {
       backgroundStyle={{
         backgroundColor: theme.colors.purple
       }}
+      contentStyle={{
+        backgroundColor: theme.colors.purple
+      }}
       content={<Text style={styles.textTooltip}>Apagar todos os filmes assistidos?</Text>}
       placement="top"
       onClose={() => {}}

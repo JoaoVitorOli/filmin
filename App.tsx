@@ -1,12 +1,14 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { StatusBar } from 'react-native';
-import { RecoilRoot, useSetRecoilState } from 'recoil';
+import { RecoilRoot } from 'recoil';
+import Toast, { BaseToast, ToastOptions } from 'react-native-toast-message';
 
 import { AppContainer } from './src/components/AppContainer';
 import Header from './src/components/Header';
 import MovieList from './src/components/MovieList';
 
 import { theme } from './src/styles/theme';
+import { toastConfig } from './src/config/CustomToastConfig';
 
 const App = () => {
   return (
@@ -19,6 +21,8 @@ const App = () => {
         <Header />
 
         <MovieList />
+
+        <Toast config={toastConfig} />
       </AppContainer>
     </RecoilRoot>
   );

@@ -10,6 +10,7 @@ import { default as IconFeather } from 'react-native-vector-icons/Feather';
 import { default as IconAntDesign } from 'react-native-vector-icons/AntDesign';
 import { launchImageLibrary } from "react-native-image-picker";
 import { useRecoilValue, useSetRecoilState } from 'recoil';
+import Toast from 'react-native-toast-message';
 
 import { userInfoState } from '../../recoil/userInfo';
 import Profile from '../Profile';
@@ -40,16 +41,15 @@ export function ActionSheetProfile() {
           name: userName,
           profile: userInfoRecoil.profile
         });
+
+        Toast.show({
+          type: 'success',
+          text1: 'Nome alterado com sucesso!',
+        });
       }
     } catch (error) {
       console.error(error);
     }
-
-    // ToastAndroid.showWithGravity(
-    //   "All Your Base Are Belong To Us",
-    //   ToastAndroid.SHORT,
-    //   ToastAndroid.CENTER
-    // );
   };
 
   async function handleSelectImage() {
@@ -67,16 +67,15 @@ export function ActionSheetProfile() {
             name: userInfo[0].name,
             profile: result.assets[0].uri!
           });
+
+          Toast.show({
+            type: 'success',
+            text1: 'Imagem alterada com sucesso!',
+          });
         }
       } catch (error) {
         console.error(error);
       }
-
-      // toast.show({
-      //   title: "Foto alterada",
-      //   placement: "top",
-      //   backgroundColor: "purple",
-      // });
     }
   }
 
@@ -92,16 +91,15 @@ export function ActionSheetProfile() {
           name: userInfo[0].name,
           profile: ""
         });
+
+        Toast.show({
+          type: 'success',
+          text1: 'Imagem deletada com sucesso!',
+        });
       }
     } catch (error) {
       console.error(error);
     }
-
-    // toast.show({
-    //   title: "Foto removida",
-    //   placement: "top",
-    //   backgroundColor: "purple",
-    // });
   }
 
   return (
