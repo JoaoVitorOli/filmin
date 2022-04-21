@@ -55,5 +55,17 @@ export const styles = StyleSheet.create({
     borderRightWidth: 2,
     borderTopWidth: 2,
     borderBottomWidth: 2,
+  },
+
+  buttonShare: {
+    backgroundColor: theme.colors.purple,
+    width: 32,
+    height: 32,
+    alignItems: "center",
+    justifyContent: "center",
+    position: "absolute",
+    left: 20,
+    top: 15,
+    borderRadius: 5
   }
 });

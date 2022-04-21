@@ -5,9 +5,10 @@ import {
   TouchableOpacity, 
   View,
 } from "react-native";
-import ActionSheet from "react-native-actions-sheet";
+import ActionSheet, { SheetManager } from "react-native-actions-sheet";
 import { default as IconFeather } from 'react-native-vector-icons/Feather';
 import { default as IconAntDesign } from 'react-native-vector-icons/AntDesign';
+import { default as IconEntypo } from 'react-native-vector-icons/Entypo';
 import { launchImageLibrary } from "react-native-image-picker";
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import Toast from 'react-native-toast-message';
@@ -19,6 +20,7 @@ import { theme } from '../../styles/theme';
 import { styles } from "./styles";
 import { getUserInfo, setUserName, setUserPhoto } from '../../db/services/User';
 import { randomName } from '../../utils/randomName';
+import { ActionSheetShare } from '../ActionSheetShare';
 
 export function ActionSheetProfile() {
   const userInfoRecoil = useRecoilValue(userInfoState);
@@ -102,71 +104,91 @@ export function ActionSheetProfile() {
     }
   }
 
+  function handleOpenActionSheetShare() {
+    SheetManager.show("share_sheet");
+  }
+
   return (
-    <ActionSheet 
-      id="profile_sheet"
-      containerStyle={{
-        backgroundColor: theme.colors.shape,
-        borderTopRightRadius: 8
-      }}
-    >
-      <View style={styles.container}>
-        <Text style={styles.heading}>Personalizar</Text>
-
-        <Profile isClickable={false} />
-
-        <View style={styles.photoEditSection}>
-          <TouchableOpacity 
-            onPress={() => handleSelectImage()} 
-            style={[styles.button, { 
-              backgroundColor: theme.colors.purple,
-              marginRight: 8
-            }]}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.buttonText}>Editar foto</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => handleDeleteProfileImage()} 
-            style={[styles.button, { 
-              backgroundColor: theme.colors.danger,
-              opacity: !userInfoRecoil.profile ? 0.3 : 1
-            }]}
-            activeOpacity={0}
-            disabled={!userInfoRecoil.profile}
-          >
-            <IconFeather
-              name="trash"
-              size={20}
-              color={"#d2d2d2"}
-            />
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.nameEditSection}>
-          <TextInput
-            placeholder="Mudar nome"
-            style={[styles.input, isInputFocused && styles.inputFocused]}
-            value={inputName}
-            onChangeText={(value) => setInputName(value)}
-            selectionColor={theme.colors.text}
-            placeholderTextColor={theme.colors.gray}
-            onFocus={() => setIsInputFocused(true)}
-            onBlur={() => setIsInputFocused(false)}
+    <>
+       <ActionSheet 
+        id="profile_sheet"
+        containerStyle={{
+          backgroundColor: theme.colors.shape,
+          borderTopRightRadius: 8
+        }}
+      >
+        <TouchableOpacity
+          style={styles.buttonShare}
+          activeOpacity={0.8}
+          onPress={() => handleOpenActionSheetShare()}
+        >
+          <IconEntypo
+            name="slideshare"
+            size={20}
+            color={"#d2d2d2"}
           />
-          <TouchableOpacity 
-            onPress={() => handleChangeUserName(inputName)} 
-            style={[styles.button, { backgroundColor: theme.colors.purple }]}
-            activeOpacity={0.8}
-          >
-            <IconAntDesign 
-              name="edit"
-              size={15}
-              color={"#fff"}
+        </TouchableOpacity>
+
+        <View style={styles.container}>
+          <Text style={styles.heading}>Personalizar</Text>
+
+          <Profile isClickable={false} />
+
+          <View style={styles.photoEditSection}>
+            <TouchableOpacity 
+              onPress={() => handleSelectImage()} 
+              style={[styles.button, { 
+                backgroundColor: theme.colors.purple,
+                marginRight: 8
+              }]}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.buttonText}>Editar foto</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => handleDeleteProfileImage()} 
+              style={[styles.button, { 
+                backgroundColor: theme.colors.danger,
+                opacity: !userInfoRecoil.profile ? 0.3 : 1
+              }]}
+              activeOpacity={0}
+              disabled={!userInfoRecoil.profile}
+            >
+              <IconFeather
+                name="trash"
+                size={20}
+                color={"#d2d2d2"}
+              />
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.nameEditSection}>
+            <TextInput
+              placeholder="Mudar nome"
+              style={[styles.input, isInputFocused && styles.inputFocused]}
+              value={inputName}
+              onChangeText={(value) => setInputName(value)}
+              selectionColor={theme.colors.text}
+              placeholderTextColor={theme.colors.gray}
+              onFocus={() => setIsInputFocused(true)}
+              onBlur={() => setIsInputFocused(false)}
             />
-          </TouchableOpacity>
+            <TouchableOpacity 
+              onPress={() => handleChangeUserName(inputName)} 
+              style={[styles.button, { backgroundColor: theme.colors.purple }]}
+              activeOpacity={0.8}
+            >
+              <IconAntDesign 
+                name="edit"
+                size={15}
+                color={"#fff"}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-    </ActionSheet>
+      </ActionSheet>
+
+      <ActionSheetShare />
+    </>
   )
 }
