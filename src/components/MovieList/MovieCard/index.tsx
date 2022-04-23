@@ -119,7 +119,7 @@ function Component({ movies }: IMoviesProps) {
         <Text style={styles.title}>{movies.name}</Text>
         <Text style={styles.date}>
           {
-            movies.movieDate && movies.movieDate
+            movies.movieDate && new Date(movies.movieDate).getFullYear()
           }
         </Text>
         <MovieRating rating={Number(movies.movieAverange)} />

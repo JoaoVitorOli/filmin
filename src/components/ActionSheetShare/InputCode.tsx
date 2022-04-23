@@ -20,7 +20,7 @@ export function InputCode({ setText, value }: InputCodeProps) {
 
   return (
     <TextInput
-      placeholder="Nome do filme..."
+      placeholder="Cole o código aqui."
       style={[styles.input, verifyIfInputIsFocused()]}
       onChangeText={(text) => setText(text)}
       value={value}

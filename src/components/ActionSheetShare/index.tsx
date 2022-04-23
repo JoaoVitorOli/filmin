@@ -133,18 +133,12 @@ export function ActionSheetShare() {
 
   async function getMoviesFromDatabase() {
     if (!inputCode) {
-      // setHasErrorOnCodeInput("empty");
-
       return;
     }
-
-    // setHasErrorOnCodeInput("");
 
     try {
       let userExists = false;
       const movies = await getAllMovies();
-
-      console.log(movies);
 
       const response = await fetch(`${process.env.SUPABASE_URL}?select=*`, {
         method: "GET",
@@ -164,13 +158,16 @@ export function ActionSheetShare() {
         }
       });
 
-      moviesFetched = moviesFetched[0].data;
-
       if (!userExists) {
-        // setHasErrorOnCodeInput("invalid");
+        Toast.show({
+          type: 'success',
+          text1: 'Código inválido.',
+        });
 
         return;
       }
+
+      moviesFetched = moviesFetched[0].data;
 
       let moviesFiltered = [];
 
@@ -192,17 +189,20 @@ export function ActionSheetShare() {
         }
       }
 
-      await addMovies(moviesFiltered);
+      await addMovies(moviesFiltered.reverse());
       setInputCode("");
 
-      // toast.show({
-      //   title: "Filmes adicionados!",
-      //   placement: "top",
-      //   backgroundColor: "purple",
-      // });
+      Toast.show({
+        type: 'success',
+        text1: 'Adicionando filmes.',
+      });
     } catch (error) {
       console.log(error);
-      // setHasErrorOnCodeInput("error");
+      
+      Toast.show({
+        type: 'success',
+        text1: 'Ocorreu um erro.',
+      });
     }
   } 
 
