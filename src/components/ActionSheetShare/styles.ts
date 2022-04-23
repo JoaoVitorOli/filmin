@@ -29,10 +29,18 @@ export const styles = StyleSheet.create({
 
   buttonDownloadMovies: {
     backgroundColor: theme.colors.purple,
-    width: 40,
-    height: 40,
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 5
+    borderRadius: 5,
+    padding: 10,
+  },
+
+  buttonGeneratShareCode: {
+    backgroundColor: theme.colors.purple,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 5,
+    height: 40,
+    width: 115
   }
 });

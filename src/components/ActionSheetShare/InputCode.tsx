@@ -47,6 +47,7 @@ export const styles = StyleSheet.create({
   },
   
   inputFocused: {
+    backgroundColor: "#3b3b3b",
     borderLeftWidth: 2,
     borderRightWidth: 2,
     borderTopWidth: 2,

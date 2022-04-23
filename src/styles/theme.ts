@@ -7,6 +7,8 @@ export const theme = {
     purple: "#4124C3",
     purpleTransparent: "#4124c321",
     pink: "#B144D4",
-    danger: "#df4655"
+    danger: "#df4655",
+    green: "#16a34a",
+    greenTransparent: "#1eff0022"
   }
 }

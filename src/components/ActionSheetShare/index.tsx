@@ -1,106 +1,210 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
   Text, 
-  TextInput, 
   TouchableOpacity, 
   View,
 } from "react-native";
 import ActionSheet from "react-native-actions-sheet";
-import { default as IconFeather } from 'react-native-vector-icons/Feather';
 import { default as IconAntDesign } from 'react-native-vector-icons/AntDesign';
-import { launchImageLibrary } from "react-native-image-picker";
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import Toast from 'react-native-toast-message';
-
-import { userInfoState } from '../../recoil/userInfo';
-import Profile from '../Profile';
+import DeviceInfo from 'react-native-device-info';
 
 import { theme } from '../../styles/theme';
 import { styles } from "./styles";
-import { getUserInfo, setUserName, setUserPhoto } from '../../db/services/User';
-import { randomName } from '../../utils/randomName';
 import { InputCode } from './InputCode';
+import { CopyCodeComponent } from './CopyCodeComponent';
+import { addMovies, getAllMovies } from '../../db/services/Movie';
+import { moviesWatchedState } from '../../recoil/watchedMovies';
+
+interface IMovie {
+  id: number;
+  name: string,
+  posterPath: string,
+  averange: number,
+  date: string,
+  isChecked: boolean,
+}
+
+interface SupabaseFetchResponse {
+  created_at: string,
+  data: IMovie[],
+  id: string,
+}
 
 export function ActionSheetShare() {
-  const userInfoRecoil = useRecoilValue(userInfoState);
-  const setUserInfoRecoil = useSetRecoilState(userInfoState);
+  const setWatchedMovies = useSetRecoilState(moviesWatchedState);
 
   const [inputCode, setInputCode] = useState("");
+  const [androidId, setAndroidId] = useState("");
+  const [showCode, setShowCode] = useState(false);
 
-  async function handleChangeUserName(input: string) {
-    try {
-      const userInfo = await getUserInfo();
+  useEffect(() => {
+    async function getAndroidId() {
+      const androidId = await DeviceInfo.getAndroidId();
   
-      if (userInfo) {
-        const userName = input ? input : randomName();
-
-        await setUserName(userName, userInfo[0].id);
-  
-        setUserInfoRecoil({
-          id: 1,
-          name: userName,
-          profile: userInfoRecoil.profile
-        });
-
-        Toast.show({
-          type: 'success',
-          text1: 'Nome alterado com sucesso!',
-        });
-      }
-    } catch (error) {
-      console.error(error);
+      setAndroidId(androidId);
     }
-  };
-
-  async function handleSelectImage() {
-    const result = await launchImageLibrary({mediaType: "photo"});
-
-    if (result.assets) {
-      try {
-        const userInfo = await getUserInfo();
     
-        if (userInfo) {
-          await setUserPhoto(result.assets[0].uri!, userInfo[0].id);
-    
-          setUserInfoRecoil({
-            id: 1,
-            name: userInfo[0].name,
-            profile: result.assets[0].uri!
-          });
+    getAndroidId();
+  }, []);
 
-          Toast.show({
-            type: 'success',
-            text1: 'Imagem alterada com sucesso!',
-          });
+  useEffect(() => {
+    return () => {
+      setShowCode(false);
+    }
+  }, []);
+
+  async function generateCode() {
+    try {
+      let userAlreadyInDatabase = false;
+      const movies = await getAllMovies();
+
+      const response = await fetch(`${process.env.SUPABASE_URL}?select=*`, {
+        method: "GET",
+        headers: {
+          "apikey": process.env.SUPABASE_ANON_KEY!,
+          "Authorization": `Bearer ${process.env.SUPABASE_ANON_KEY!}`
         }
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  }
+      });
 
-  async function handleDeleteProfileImage() {
-    try {
-      const userInfo = await getUserInfo();
-  
-      if (userInfo) {
-        await setUserPhoto("", userInfo[0].id);
-  
-        setUserInfoRecoil({
-          id: 1,
-          name: userInfo[0].name,
-          profile: ""
-        });
+      const data: SupabaseFetchResponse[] = await response.json();
 
-        Toast.show({
-          type: 'success',
-          text1: 'Imagem deletada com sucesso!',
+      if (data.length > 0) {
+        data.map(movie => {
+          if (movie.id === androidId) {
+            userAlreadyInDatabase = true;
+          }
         });
       }
+
+      if (!userAlreadyInDatabase) {
+        const body = {
+          id: androidId,
+          data: movies
+        }
+
+        await fetch(`${process.env.SUPABASE_URL}`, {
+          method: "POST",
+          headers: {
+            "apikey": process.env.SUPABASE_ANON_KEY!,
+            "Authorization": `Bearer ${process.env.SUPABASE_ANON_KEY!}`,
+            "Content-Type": "application/json",
+            "Prefer": "return=representation"
+          },
+          body: JSON.stringify(body)
+        });
+
+        setShowCode(true);
+
+        return;
+      }
+
+      if (userAlreadyInDatabase) {
+        const body = {
+          data: movies
+        }
+
+        await fetch(`${process.env.SUPABASE_URL}?id=eq.${androidId}`, {
+          method: "PATCH",
+          headers: {
+            "apikey": process.env.SUPABASE_ANON_KEY!,
+            "Authorization": `Bearer ${process.env.SUPABASE_ANON_KEY!}`,
+            "Content-Type": "application/json",
+            "Prefer": "return=representation"
+          },
+          body: JSON.stringify(body),
+        });
+
+        setShowCode(true);
+
+        return;
+      }
+
     } catch (error) {
-      console.error(error);
+      console.log(error);
+
+      Toast.show({
+        type: 'success',
+        text1: 'Ocorreu um erro',
+      });
     }
   }
+
+  async function getMoviesFromDatabase() {
+    if (!inputCode) {
+      // setHasErrorOnCodeInput("empty");
+
+      return;
+    }
+
+    // setHasErrorOnCodeInput("");
+
+    try {
+      let userExists = false;
+      const movies = await getAllMovies();
+
+      console.log(movies);
+
+      const response = await fetch(`${process.env.SUPABASE_URL}?select=*`, {
+        method: "GET",
+        headers: {
+          "apikey": process.env.SUPABASE_ANON_KEY!,
+          "Authorization": `Bearer ${process.env.SUPABASE_ANON_KEY!}`
+        }
+      });
+
+      const data = await response.json();
+
+      let moviesFetched = data.filter((user: SupabaseFetchResponse) => {
+        if (user.id === inputCode) {
+          userExists = true;
+
+          return user.data;
+        }
+      });
+
+      moviesFetched = moviesFetched[0].data;
+
+      if (!userExists) {
+        // setHasErrorOnCodeInput("invalid");
+
+        return;
+      }
+
+      let moviesFiltered = [];
+
+      for (let i = 0; i < moviesFetched.length; i++) {
+        let idOfMovieFetchedExist = false;
+        
+        for (let i2 = 0; i2 < movies!.length; i2++) {
+          if (moviesFetched[i].name === movies![i2].name) {
+            idOfMovieFetchedExist = true;
+          }
+        }
+        
+        if (!idOfMovieFetchedExist) {
+          if (moviesFetched[i].movieStatus === "true") {
+            setWatchedMovies(state => state + 1);
+          }
+
+          moviesFiltered.push(moviesFetched[i]);
+        }
+      }
+
+      await addMovies(moviesFiltered);
+      setInputCode("");
+
+      // toast.show({
+      //   title: "Filmes adicionados!",
+      //   placement: "top",
+      //   backgroundColor: "purple",
+      // });
+    } catch (error) {
+      console.log(error);
+      // setHasErrorOnCodeInput("error");
+    }
+  } 
 
   return (
     <ActionSheet 
@@ -109,6 +213,7 @@ export function ActionSheetShare() {
         backgroundColor: theme.colors.shape,
         borderTopRightRadius: 8
       }}
+      onClose={() => setShowCode(false)}
     >
       <View style={styles.container}>
         <Text style={styles.heading}>Compartilhar</Text>
@@ -124,6 +229,7 @@ export function ActionSheetShare() {
           <TouchableOpacity
             activeOpacity={0.8}
             style={styles.buttonDownloadMovies}
+            onPress={() => getMoviesFromDatabase()}
           >
             <IconAntDesign
               name="download"
@@ -133,14 +239,22 @@ export function ActionSheetShare() {
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.text}>Ou copie seu código e mande para seus amigos:</Text>
+        <Text style={{ ...styles.text, marginBottom: 18 }}>Ou copie seu código e mande para seus amigos:</Text>
 
-        <TouchableOpacity
-          activeOpacity={0.8}
-          style={styles.buttonDownloadMovies}
-        >
-          <Text style={styles.text}>Gerar código</Text>
-        </TouchableOpacity>
+        {!showCode ? (
+          <TouchableOpacity
+            activeOpacity={0.8}
+            style={styles.buttonGeneratShareCode}
+            onPress={() => generateCode()}
+          >
+            <Text style={{ ...styles.text, fontFamily: "nunito_bold" }}>
+              Gerar código
+            </Text>
+          </TouchableOpacity>
+        ) : (
+          <CopyCodeComponent androidId={androidId} />
+        )}
+
       </View>
     </ActionSheet>
   )

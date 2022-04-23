@@ -17,7 +17,7 @@ export default function Profile({ isClickable = true }: ProfileProps) {
   function openActionSheetProfile() {
     SheetManager.show("profile_sheet");
   }
-
+  
   return (
     <TouchableOpacity 
       onPress={() => openActionSheetProfile()} 

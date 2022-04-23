@@ -37,6 +37,28 @@ export async function addNewMovie({
   }
 }
 
+export async function addMovies(movies: MovieProps[]) {
+  try {
+    await database.write(async () => {
+      for (let i = 0; i < movies.length; i++) {
+        await database.get<Movie>("movies").create(movie => {
+          movie.name = movies[i].name,
+          movie.movieDate = movies[i].movieDate,
+          movie.movieAverange = String(movies[i].movieAverange),
+          movie.movieStatus = movies[i].movieStatus,
+          movie.posterPath = movies[i].posterPath
+        });
+      }
+    });
+
+    // await database.write(async () => {
+    //   await database.unsafeResetDatabase();
+    // })
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 export async function getAllMovies() {
   try {
     const moviesCollection = database.get<Movie>("movies");
