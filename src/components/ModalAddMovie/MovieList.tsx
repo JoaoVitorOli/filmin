@@ -23,12 +23,6 @@ interface MoviesTypes {
   movieStatus: string
 } 
 
-interface IMoviesItemProps {
-  name: string;
-  posterPath: string;
-  date: string;
-}
-
 interface IMoviesProps {
   item: MoviesTypes
 }

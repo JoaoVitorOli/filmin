@@ -59,15 +59,17 @@ export function ModalAddMovie({
     }
   }, [Keyboard]);
 
-  // useEffect(() => {
-  //   console.log(selectedMovie);
-  // }, [selectedMovie]);
-
   const setMovieText = useCallback((value: string) => {
     setMovieName(value);
   }, []);
 
   function handleSelectMovie(item: MovieProps) {
+    if (Object.entries(selectedMovie).length > 0) {
+      setSelectedMovie({} as MovieProps);
+
+      return;
+    }
+
     const data = {
       id: item.id,
       name: item.name,
@@ -92,7 +94,9 @@ export function ModalAddMovie({
         movieStatus: "false",
       });
     }
+
     closeModal();
+    setSelectedMovie({} as MovieProps);
   }
 
   async function handleFetchMovie() {
@@ -163,7 +167,10 @@ export function ModalAddMovie({
     >
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-          <ButtonClose onRequestClose={closeModal} />
+          <ButtonClose onRequestClose={() => {
+            closeModal();
+            setSelectedMovie({} as MovieProps);
+          }} />
 
           <View style={styles.searchArea}>
             <InputSearch

@@ -5,14 +5,12 @@ import {
   TouchableOpacity, 
   View,
 } from "react-native";
-import ActionSheet, { SheetManager } from "react-native-actions-sheet";
+import ActionSheet from "react-native-actions-sheet";
 import { default as IconFeather } from 'react-native-vector-icons/Feather';
 import { default as IconAntDesign } from 'react-native-vector-icons/AntDesign';
-import { default as IconEntypo } from 'react-native-vector-icons/Entypo';
 import { launchImageLibrary } from "react-native-image-picker";
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import Toast from 'react-native-toast-message';
-import NetInfo from "@react-native-community/netinfo";
 
 import { userInfoState } from '../../recoil/userInfo';
 import Profile from '../Profile';
@@ -21,7 +19,6 @@ import { theme } from '../../styles/theme';
 import { styles } from "./styles";
 import { getUserInfo, setUserName, setUserPhoto } from '../../db/services/User';
 import { randomName } from '../../utils/randomName';
-import { ActionSheetShare } from '../ActionSheetShare';
 
 export function ActionSheetProfile() {
   const userInfoRecoil = useRecoilValue(userInfoState);
@@ -105,25 +102,6 @@ export function ActionSheetProfile() {
     }
   }
 
-  function handleOpenActionSheetShare() {
-    let isConnected = true;
-
-    const checkUserConnection = NetInfo.addEventListener(state => {
-      isConnected = state.isConnected!;
-    });
-
-    checkUserConnection();
-
-    if (isConnected) {
-      SheetManager.show("share_sheet");
-    } else {
-      Toast.show({
-        type: 'success',
-        text1: 'Sem conexão com a internet.',
-      });
-    }
-  }
-
   return (
     <>
        <ActionSheet 
@@ -133,18 +111,6 @@ export function ActionSheetProfile() {
           borderTopRightRadius: 8
         }}
       >
-        <TouchableOpacity
-          style={styles.buttonShare}
-          activeOpacity={0.8}
-          onPress={() => handleOpenActionSheetShare()}
-        >
-          <IconEntypo
-            name="slideshare"
-            size={20}
-            color={"#d2d2d2"}
-          />
-        </TouchableOpacity>
-
         <View style={styles.container}>
           <Text style={styles.heading}>Personalizar</Text>
 
@@ -203,8 +169,6 @@ export function ActionSheetProfile() {
           </View>
         </View>
       </ActionSheet>
-
-      <ActionSheetShare />
     </>
   )
 }
