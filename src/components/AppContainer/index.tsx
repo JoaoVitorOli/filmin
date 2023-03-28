@@ -1,16 +1,15 @@
-import { SafeAreaView, View } from "react-native";
 import React, { useEffect, ReactNode } from 'react';
+import { View } from "react-native";
+import { useSetRecoilState } from "recoil";
 
 import { createNewUser, getUserInfo } from "../../db/services/User";
 import { randomName } from "../../utils/randomName";
 import { getAllMovies } from "../../db/services/Movie";
-
-import { styles } from "./styles";
-import { useSetRecoilState } from "recoil";
 import { moviesWatchedState } from "../../recoil/watchedMovies";
 import { userInfoState } from "../../recoil/userInfo";
 import { isFirstTimeOpenedState } from "../../recoil/isFirstTimeOpened";
 import { getIfIsAppFirstTimeOpened } from "../../utils/asyncStorageFunctions";
+import { styles } from "./styles";
 
 interface AppContainer {
   children: ReactNode;
@@ -90,9 +89,7 @@ export function AppContainer({ children }: AppContainer) {
 
   return (
     <View style={styles.Container}>
-      <SafeAreaView>
-        {children}
-      </SafeAreaView> 
+      {children}
     </View>
   )
 }

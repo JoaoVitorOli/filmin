@@ -84,7 +84,10 @@ export function ModalAddMovie({
 
   async function handleAddMovie() {
     if (Object.entries(selectedMovie).length > 0) {
-      await addNewMovie(selectedMovie);
+      await addNewMovie({
+        ...selectedMovie,
+        movieAverange: selectedMovie.movieAverange.toFixed(1)
+      });
     } else {
       await addNewMovie({
         name: movieName,
